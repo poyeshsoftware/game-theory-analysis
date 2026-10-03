@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluating Classical Board States: From Handcrafted Heuristics to Neural Network Value Functions</title>
+  <meta name="description" content="A comprehensive analysis of state evaluation in deterministic and stochastic board games: Minimax, Alpha-Beta pruning, Expectiminimax, and neural network value functions.">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --muted: #555555;
+      --border: #e2e8f0;
+      --accent: #2563eb;
+      --code-bg: #f8fafc;
+      --font-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --border: #334155;
+        --accent: #60a5fa;
+        --code-bg: #1e293b;
+      }
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-serif);
+      line-height: 1.75;
+      font-size: 1.125rem;
+    }
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: 2.25rem;
+      line-height: 1.25;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: -0.015em;
+    }
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    p {
+      margin-bottom: 1.5rem;
+    }
+    ul, ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+    blockquote {
+      margin: 1.5rem 0;
+      padding: 0.75rem 1.25rem;
+      border-left: 4px solid var(--accent);
+      background: var(--code-bg);
+      font-style: italic;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9em;
+      background: var(--code-bg);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      border: 1px solid var(--border);
+    }
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Evaluating Classical Board States: From Handcrafted Heuristics to Neural Network Value Functions</h1>
+      <div class="meta">Published on October 3, 2026 · By Poyesh Research & Tabletop Analysis · 10 min read</div>
+    </header>
+
+    <main>
+      <p>In algorithmic game theory, two fundamental paradigms govern the development of competitive engines: explicit game-tree search and position evaluation. While brute-force search explores future decision branches, the evaluation function acts as the compass, distilling the high-dimensional complexity of a board state into a scalar value representing winning probability or expected utility.</p>
+
+      <p>Across classical board games—spanning deterministic perfect-information systems like chess and checkers, to stochastic imperfect-information environments like backgammon—the design of this evaluation function has traversed three distinct eras: linear handcrafted feature vectors, rollout simulations, and deep neural value approximations.</p>
+
+      <h2>1. The Geometry of State Spaces</h2>
+      <p>Before evaluating a board state, one must appreciate the sheer magnitude of the combinatorial state space. A complete traversal of any classical strategy game is mathematically impossible under physical computing constraints:</p>
+      <ul>
+        <li><strong>American 8x8 Checkers (Draughts):</strong> Possesses approximately <code>5 × 10^20</code> reachable positions. It was weakly solved in 2007 by Jonathan Schaeffer's Chinook project through the synthesis of forward alpha-beta search and an endgame tablebase containing all positions with 10 or fewer pieces (<code>3.9 × 10^13</code> states).</li>
+        <li><strong>Chess:</strong> Possesses a game-tree complexity estimated at <code>10^120</code> (the Shannon Number) and an estimated state-space complexity of <code>10^44</code> to <code>10^46</code> legal positions.</li>
+        <li><strong>Backgammon:</strong> Possesses roughly <code>10^18</code> legal checker configurations. However, the presence of stochastic chance nodes (rolling two six-sided dice yielding 21 distinct outcomes, or 36 equally weighted permutations) inflates the effective branching factor at each depth level to several hundred possible transitions.</li>
+      </ul>
+
+      <h2>2. Handcrafted Linear Heuristics and Minimax Search</h2>
+      <p>The classical approach to evaluation relies on linear combinations of domain-specific features extracted from board geometry:</p>
+      <pre><code>Evaluation(State) = w_1 * f_1(State) + w_2 * f_2(State) + ... + w_n * f_n(State)</code></pre>
+      <p>In deterministic games like chess and draughts, features were meticulously engineered by international grandmasters and computer scientists:</p>
+      <ul>
+        <li><strong>Material Balance:</strong> Direct piece valuation (e.g., standard pawn = 1, knight = 3, bishop = 3.25, rook = 5, queen = 9 in chess; men vs. kings in checkers).</li>
+        <li><strong>Positional Geometry:</strong> Control of key structural squares (the center four squares in chess; the double-corner diagonal and king-row stability in checkers).</li>
+        <li><strong>Mobility:</strong> The count of legal moves available to a side versus the opponent, penalizing cramped or boxed pieces.</li>
+        <li><strong>King Safety and Pawn Structure:</strong> Isolated, doubled, or backward pawns, compared against advancing passed pawns.</li>
+      </ul>
+
+      <p>Coupled with <strong>Alpha-Beta Pruning</strong>, which eliminates branches guaranteed to be sub-optimal based on established bounds (alpha for the maximizer, beta for the minimizer), linear evaluation functions enabled engines like Deep Blue to calculate up to 200 million positions per second.</p>
+
+      <h2>3. The Stochastic Challenge: Expectiminimax in Backgammon</h2>
+      <p>In backgammon, standard Alpha-Beta pruning cannot be applied directly because player decisions alternate with stochastic dice rolls. Instead, search algorithms must utilize <strong>Expectiminimax</strong>, which introduces chance nodes taking the weighted average of all 36 possible dice outcomes:</p>
+      <pre><code>Value(ChanceNode) = Sum[ P(Roll_i) * Value(DecisionNode_i) ]</code></pre>
+      <p>Because every chance node branches 21 ways (15 asymmetric rolls with weight 2, and 6 doublets with weight 1), the depth of exhaustive search collapses. A 3-ply backgammon search requires evaluating tens of thousands of leaf nodes; a 5-ply search becomes computationally prohibitive in real-time play.</p>
+      <p>Consequently, early heuristic engines relied heavily on static features:</p>
+      <ul>
+        <li><strong>Pip Count:</strong> The total sum of distances required for all 15 checkers to reach the bearoff tray.</li>
+        <li><strong>Anchor Points:</strong> Establishing defensive footholds on the opponent's home board (the 20-point or 21-point).</li>
+        <li><strong>Prime Length:</strong> The count of contiguous closed points, recognizing that a 6-prime creates an impassable barrier.</li>
+        <li><strong>Blot Vulnerability:</strong> The exact mathematical probability of single exposed checkers being hit by direct or indirect rolls.</li>
+      </ul>
+
+      <h2>4. The Neural Revolution: TD-Gammon and Reinforcement Learning</h2>
+      <p>The breakthrough that permanently altered game AI occurred not in chess, but in backgammon. In 1992, Gerald Tesauro created <strong>TD-Gammon</strong> at IBM Research. Rather than employing grandmaster-crafted linear formulas, TD-Gammon utilized a multi-layer perceptron trained via <strong>Temporal Difference Learning [TD(lambda)]</strong> through self-play.</p>
+      <p>The network took a raw representation of the board state (checker counts across the 24 points, the bar, and off the board) and output four continuous probability estimates:</p>
+      <ol>
+        <li>Probability of White winning a single game.</li>
+        <li>Probability of White winning a gammon (double points).</li>
+        <li>Probability of Black winning a single game.</li>
+        <li>Probability of Black winning a gammon.</li>
+      </ol>
+      <p>Remarkably, without explicit human instructions on strategic themes like slotting, priming, or duplicate shots, TD-Gammon independently discovered positional principles that challenged human convention, prompting a wholesale revision of opening book theory among human champions.</p>
+
+      <h2>5. Efficiently Updatable Neural Networks (NNUE)</h2>
+      <p>In modern deterministic engines (such as Stockfish in chess and contemporary draughts analyzers), the evaluation paradigm has culminated in <strong>NNUE (Efficiently Updatable Neural Network)</strong>.</p>
+      <p>NNUE replaces both complex manual feature extractors and heavy GPU-dependent deep networks with a lightweight CPU-friendly neural architecture. Because moving a single piece alters only a fraction of board inputs, the hidden layer activations can be incrementally updated in constant time via differential accumulation. This innovation allows modern engines to retain deep tree searches (30+ plies) while evaluating states through non-linear neural approximations rather than rigid handcrafted heuristics.</p>
+
+      <h2>Conclusion: Synthesis of Search and Heuristics</h2>
+      <p>Whether examining Chinook's perfect endgame tablebases, Stockfish's NNUE evaluations, or neural net rollouts in backgammon engines like wildbg and GNU Backgammon, the trajectory of computer strategy games reveals a unifying principle: raw computational power is meaningless without an evaluation metric that accurately mirrors game-theoretic equilibrium.</p>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Poyesh Research · Dedicated to Classical Tabletop Mathematics, Algorithm Engineering, and Game Theory.</p>
+    </footer>
+  </div>
+</body>
+</html>
