@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Game Engine Research: A Multilingual Reading List for Chess, Checkers and Backgammon</title>
+<meta name="description" content="A curated index of 291 technical articles in 16 languages on chess engines, checkers solvers, backgammon probability and provably fair dice.">
+<link rel="canonical" href="https://poyeshsoftware.github.io/game-theory-analysis/research-index.html">
+<style>
+:root{--bg:#fff;--text:#1a1a1a;--muted:#5b6472;--border:#e2e8f0;--accent:#2563eb;--soft:#f8fafc}
+@media (prefers-color-scheme:dark){:root{--bg:#0f172a;--text:#f1f5f9;--muted:#94a3b8;--border:#334155;--accent:#60a5fa;--soft:#1e293b}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.7;font-size:1.05rem}
+.container{max-width:820px;margin:0 auto;padding:3rem 1.5rem}
+h1{font-size:2.1rem;line-height:1.25;margin:0 0 .75rem}
+h2{font-size:1.45rem;margin-top:3rem;border-bottom:1px solid var(--border);padding-bottom:.4rem}
+h3{font-size:1rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:1.6rem 0 .4rem}
+a{color:var(--accent)}
+.meta,.blurb,.host{color:var(--muted)}
+.host{font-size:.8rem;margin-left:.3rem}
+.count{font-size:.85rem;color:var(--muted);font-weight:400}
+ul{padding-left:1.2rem} li{margin-bottom:.35rem}
+nav ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.2rem}
+.callout{background:var(--soft);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin:1.5rem 0}
+footer{margin-top:3.5rem;padding-top:1.5rem;border-top:1px solid var(--border);color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>Board Game Engine Research: A Multilingual Reading List for Chess, Checkers and Backgammon</h1>
+<p class="meta">Updated October 2026 &middot; 291 articles &middot; 16 languages</p>
+</header>
+
+<p>Three games have shaped how computers learn to play. Chess pushed search to its limits and then handed evaluation to neural networks. Checkers became the largest game ever solved outright, when Jonathan Schaeffer's Chinook team proved in 2007 that perfect play ends in a draw. Backgammon added dice, which forced engines to reason about probability instead of certainty, and gave us TD-Gammon, one of the first programs to teach itself through reinforcement learning.</p>
+
+<p>Over the past months we have written about all three games for readers in many languages. This page gathers every one of those articles in one place, sorted by game and then by language, so you can follow one idea, such as bitboards or bear-off probabilities, across languages, or read the whole series in your own.</p>
+
+<nav aria-label="Sections"><ul>
+<li><a href="#chess">Chess</a></li><li><a href="#checkers">Checkers</a></li><li><a href="#backgammon">Backgammon</a></li><li><a href="#general">Game theory &amp; history</a></li><li><a href="#play">Try the ideas yourself</a></li>
+</ul></nav>
+
+<h2>How the three games differ</h2>
+<p><strong>Chess</strong> has around 10<sup>43</sup> legal positions, far too many to solve, so engines combine fast move generation with deep alpha-beta search and a learned evaluation. Modern NNUE networks update incrementally as pieces move, which is why they run fast enough on an ordinary CPU.</p>
+<p><strong>Checkers</strong> has about 5&times;10<sup>20</sup> positions. That is small enough that a mix of forward search and backward analysis from the endgame could close the gap. The whole board fits in a handful of 32-bit integers, and the mandatory-capture rule prunes huge parts of the tree.</p>
+<p><strong>Backgammon</strong> is a game of chance with full information. Each turn has 21 distinct dice outcomes, so search must average over them. Late in the game, when the two sides no longer interact, the race reduces to an absorbing Markov chain that can be solved exactly. The doubling cube then turns every position into a pricing problem much like a financial option.</p>
+
+<div class="callout">
+<p><strong>A note on fair dice.</strong> Online backgammon players have long suspected that dice are rigged. The cryptographic answer is a commit-reveal scheme: the server commits to a secret seed before the game by publishing its hash, the player adds their own randomness, and once the game ends the seed is revealed so anyone can recompute every roll. Boardgammon publishes how its implementation works on its <a href="https://boardgammon.com/fair-dice/">provably fair backgammon dice</a> page, and several articles below walk through the HMAC-SHA256 construction step by step.</p>
+</div>
+
+<section id="chess"><h2>Chess engines and chess learning <span class="count">60</span></h2>
+<p class="blurb">Bitboards, magic move generation, alpha-beta search, quiescence search, NNUE evaluation and server-authoritative online play.</p>
+<h3>English</h3><ul>
+<li><a href="https://6ac17036e66f9.site123.me/blog/topological-state-spaces-magic-bitboards-and-quiescence-verification-in-modern-chess-engines">Topological State Spaces, Magic Bitboards, and Quiescence Verification in Modern Chess Engines</a> <span class="host">6ac17036e66f9.site123.me</span></li>
+<li><a href="https://boardgamestheory.mataroa.blog/blog/the-shannon-number-and-branching-factor-bounds-in-distributed-chess-architectures/">The Shannon Number and Branching Factor Bounds in Distributed Chess Architectures</a> <span class="host">boardgamestheory.mataroa.blog</span></li>
+<li><a href="https://boardgamestheory.ucoz.net/topological-state-spaces-magic-bitboards-quiescence-chess-engines">Topological State Spaces, Magic Bitboards, and Quiescence Verification in Modern Chess Engines</a> <span class="host">boardgamestheory.ucoz.net</span></li>
+<li><a href="https://boardgamestheory.weebly.com/blog/topological-state-spaces-magic-bitboards-and-quiescence-verification-in-modern-chess-engines">Topological State Spaces, Magic Bitboards, and Quiescence Verification in Modern Chess Engines</a> <span class="host">boardgamestheory.weebly.com</span></li>
+<li><a href="https://boardgamestheory.wordpress.com/2026/10/05/zobrist-hashing-transposition-bounds-and-monotonic-state-synchronization-in-distributed-chess-engines/">Zobrist Hashing, Transposition Bounds, and Monotonic State Synchronization in Distributed Chess Engines</a> <span class="host">boardgamestheory.wordpress.com</span></li>
+<li><a href="https://boardgamestheory.zohosites.eu/blogs/post/topological-state-spaces-magic-bitboards-and-quiescence-verification-in-chess-engines">Topological State Spaces, Magic Bitboards, and Quiescence Verification in Chess Engines</a> <span class="host">boardgamestheory.zohosites.eu</span></li>
+<li><a href="https://bordspellen-geschiedenis.blogspot.com/2026/10/schaakengine-architectuur-64-bit.html">Schaakengine Architectuur: 64-Bit Magic Bitboards, Alfa-Bèta Snoeien en Quiescence Search</a> <span class="host">bordspellen-geschiedenis.blogspot.com</span></li>
+<li><a href="https://cosmos47.com/post/check-out-boardgammon-chess-online">Check out Boardgammon Chess online</a> <span class="host">cosmos47.com</span></li>
+<li><a href="https://dev.to/payamprivate/high-performance-turn-based-game-ai-integrating-bitboard-representation-with-alpha-beta-pruning-in-4kc2">High-Performance Turn-Based Game AI: Integrating Bitboard Representation with Alpha-Beta Pruning in Rust and Go</a> <span class="host">dev.to</span></li>
+<li><a href="https://gammontheory.vivaldi.net/2026/10/06/arkitektur-for-moderne-sjakkmotorer-64-bits-magic-bitboards-alfa-beta-beskjaering-og-quiescence-search/">Arkitektur for Moderne Sjakkmotorer: 64-bits Magic Bitboards, Alfa-Beta-Beskjæring og Quiescence Search</a> <span class="host">gammontheory.vivaldi.net</span></li>
+<li><a href="https://gist.github.com/poyeshsoftware/a05b3951b57ab9dab3da1f79039247ed">Algorithmic Representation of Classical Board Games: Bitboards, State Invariants, and Rollout Verification</a> <span class="host">gist.github.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/chess-theory/-/blob/main/combinatorial-complexity-state-reconciliation.md">Combinatorial Complexity, State Reconciliation, and Move Validation in Distributed Chess Engines</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/chess-theory/-/blob/main/magic-bitboards-quiescence-search.md">Magic Bitboards, Ray Attacks, and Quiescence Search in High-Performance Chess Engines</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/chess-theory/-/blob/main/syzygy-tablebases-retrograde-analysis.md">Endgame Tablebase Compression, Retrograde Synthesis, and Syzygy Probing Dynamics in Chess Engines</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://justpaste.it/in9lw">Combinatorial Complexity, Magic Bitboards, and Quiescence Search in High-Performance Chess Engines</a> <span class="host">justpaste.it</span></li>
+<li><a href="https://poyeshsoftware.github.io/chess-theory/">Combinatorial Complexity, Monotonic Clocks, and Distributed State Reconciliation in Modern Chess Engines</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://poyeshsoftware.github.io/chess-theory/magic-bitboards-quiescence-search.html">Magic Bitboards, Transposition Hashing, and Quiescence Verification in Modern Chess Engines</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://poyeshsoftware.github.io/chess-theory/syzygy-tablebases-retrograde-analysis.html">Endgame Tablebase Compression, Retrograde Synthesis, and Syzygy Probing Dynamics in Chess Engines</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://telegra.ph/Clock-Synchronization-Monotonic-Timers-and-Lag-Compensation-in-Competitive-Digital-Chess-Protocols-10-04">Clock Synchronization, Monotonic Timers, and Lag Compensation in Competitive Digital Chess Protocols</a> <span class="host">telegra.ph</span></li>
+<li><a href="https://telegra.ph/Null-Move-Pruning-and-Zugzwang-Verification-in-High-Depth-Chess-Search-10-05">Null-Move Pruning and Zugzwang Verification in High-Depth Chess Search</a> <span class="host">telegra.ph</span></li>
+<li><a href="https://workoutingym.hashnode.dev/monotonic-clocks-network-slew-and-lag-compensation-in-distributed-chess-engines">Monotonic Clocks, Network Slew, and Lag Compensation in Distributed Chess Engines</a> <span class="host">workoutingym.hashnode.dev</span></li>
+<li><a href="https://write.as/gp6stjdch0yj0">Combinatorial Complexity and Low-Latency State Synchronization in Modern Chess Architectures</a> <span class="host">write.as</span></li>
+<li><a href="https://write.as/ud1q86siofxtt">Asynchronous Time Stepping and Delta Compression in Distributed Chess Protocols</a> <span class="host">write.as</span></li>
+<li><a href="https://write.as/tjlllbwnamomf">Piece-Square Tables and Tapered Evaluation Functions in Modern Chess Engines</a> <span class="host">write.as</span></li>
+<li><a href="https://www.diigo.com/user/boardgamesgammon">Boardgammon Chess — Real-Time Multiplayer, 64-Bit Bitboard Engine &amp; Magic Bitboards</a> <span class="host">www.diigo.com</span></li>
+<li><a href="https://www.linkedin.com/pulse/monotonic-clock-synchronization-network-slew-lag-ghaderkourehpaz-be1bf/">Monotonic Clock Synchronization, Network Slew, and Lag Compensation in Distributed Multiplayer Chess Architectures</a> <span class="host">www.linkedin.com</span></li>
+<li><a href="https://www.quora.com/How-do-you-approach-bitboard-chess-engine-design-engines-computer-chess-bitboard-chess-AI-chess/answer/Payam-Private">How do you approach bitboard chess engine design?</a> <span class="host">www.quora.com</span></li>
+</ul>
+<h3>Danish / Norwegian</h3><ul>
+<li><a href="https://braetspil-historie-analyse.blogspot.com/2026/10/skakmaskine-arkitektur-64-bit-bitboards.html">Skakmaskine-Arkitektur: 64-Bit Bitboards, Magic Bitboards og Quiescence Search</a> <span class="host">braetspil-historie-analyse.blogspot.com</span></li>
+</ul>
+<h3>Dutch</h3><ul>
+<li><a href="https://teoria-juegos-tablero.blogspot.com/2026/10/arquitectura-de-motores-de-ajedrez.html">Arquitectura de Motores de Ajedrez: Magic Bitboards de 64 bits, Poda Alfa-Beta y Búsqueda de Quiescencia</a> <span class="host">teoria-juegos-tablero.blogspot.com</span></li>
+<li><a href="https://teoriadejogos.comunidades.net/arquitetura-de-motores-de-xadrez-magic-bitboards-de-64-bits-e-otimizacao-alfa-beta">Arquitetura de Motores de Xadrez: Magic Bitboards de 64 bits e Otimização Alfa-Beta</a> <span class="host">teoriadejogos.comunidades.net</span></li>
+</ul>
+<h3>Finnish</h3><ul>
+<li><a href="https://lautapelit-historia-analyysi.blogspot.com/2026/10/ur-pelista-hnefatafliin-ja-tammeen.html">Klassinen shakki digitaalisella aikakaudella: Pelimoottoreiden arkkitehtuuri, bittilaudat ja moderni verkkoalusta</a> <span class="host">lautapelit-historia-analyysi.blogspot.com</span></li>
+<li><a href="https://lautapelit-historia-analyysi.blogspot.com/2026/10/shakkimoottorin-arkkitehtuuri-64.html">Shakkimoottorin Arkkitehtuuri: 64-Bittiset Magic Bitboardit, Alfa-Beeta-Karsinta ja Quiescence Search</a> <span class="host">lautapelit-historia-analyysi.blogspot.com</span></li>
+</ul>
+<h3>French</h3><ul>
+<li><a href="https://rentry.co/architecture-moteurs-echecs-fr">Architecture des Moteurs d&#x27;Échecs Modernes : Bitboards Magiques 64-bits, Élagage Alpha-Bêta et Quiescence Search</a> <span class="host">rentry.co</span></li>
+<li><a href="https://theorie-jeux-plateau.blog4ever.com/topologies-de-bitboards-magiques-hachage-de-zobrist-et-verification-de-quiescence-dans-les-moteurs-d-echecs-distribues">Topologies de Bitboards Magiques, Hachage de Zobrist et Vérification de Quiescence dans les Moteurs d&#x27;Échecs Distribués</a> <span class="host">theorie-jeux-plateau.blog4ever.com</span></li>
+<li><a href="https://theorie-jeux-plateau.netlify.app/architecture-moteurs-echecs/">Architecture des Moteurs d&#x27;Échecs Modernes : Bitboards Magiques 64-bits, Élagage Alpha-Bêta et Réseaux NNUE</a> <span class="host">theorie-jeux-plateau.netlify.app</span></li>
+</ul>
+<h3>German</h3><ul>
+<li><a href="https://gametheory-algorithms.vercel.app/schach-engine-architektur/">Architektur moderner Schach-Engines: 64-Bit Magic Bitboards, Alpha-Beta-Pruning und NNUE-Netzwerke</a> <span class="host">gametheory-algorithms.vercel.app</span></li>
+<li><a href="https://spieltheorie-algorithmen.blogspot.com/2026/10/schachengine-architektur-64-bit.html">Schachengine-Architektur: 64-Bit Magic Bitboards, Alpha-Beta-Suche und Quiescence-Verifikation</a> <span class="host">spieltheorie-algorithmen.blogspot.com</span></li>
+</ul>
+<h3>Italian</h3><ul>
+<li><a href="https://coda.io/@payam/teoria-dei-giochi-e-algoritmi-scacchi-dama-e-backgammon">Architettura dei Motori di Scacchi: Bitboard a 64 Bit, Potatura Alpha-Beta e Reti NNUE</a> <span class="host">coda.io</span></li>
+<li><a href="https://game-theory-docs.readthedocs.io/en/latest/architettura-motori-scacchi/">Architettura dei Motori di Scacchi Moderni: Bitboards, Ricerca Minimax e Valutazione NNUE</a> <span class="host">game-theory-docs.readthedocs.io</span></li>
+<li><a href="https://hackmd.io/Pfx2vWZnSFKsy83NI7PEAw">Architettura dei Motori Scacchistici Moderni: Magic Bitboards a 64 Bit, Potatura Alfa-Beta e Quiescence Search</a> <span class="host">hackmd.io</span></li>
+</ul>
+<h3>Korean</h3><ul>
+<li><a href="https://velog.io/@boardgamestheory/%EC%B2%B4%EC%8A%A4-%EC%97%94%EC%A7%84-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-64%EB%B9%84%ED%8A%B8-%EB%A7%A4%EC%A7%81-%EB%B9%84%ED%8A%B8%EB%B3%B4%EB%93%9C-%EC%95%8C%ED%8C%8C-%EB%B2%A0%ED%83%80-%EA%B0%80%EC%A7%80%EC%B9%98%EA%B8%B0%EC%99%80-%EC%A0%95%EC%A0%81-%EA%B5%90%ED%99%98-%ED%8F%89%EA%B0%80SEE">체스 엔진 아키텍처: 64비트 매직 비트보드, 알파-베타 가지치기와 정적 교환 평가(SEE)</a> <span class="host">velog.io</span></li>
+</ul>
+<h3>Persian</h3><ul>
+<li><a href="https://boardgamestheory.blogsazan.com/post/3YmU/%D8%AA%D8%B1%DA%A9%DB%8C%D8%A8%DB%8C%D8%A7%D8%AA-%D9%85%D8%AD%D8%A7%D8%B3%D8%A8%D8%A7%D8%AA%DB%8C%D8%8C-%D9%85%D8%A7%D8%AA%D8%B1%DB%8C%D8%B3%E2%80%8C%D9%87%D8%A7%DB%8C-%D8%A8%DB%8C%D8%AA%DB%8C-%D8%AC%D8%A7%D8%AF%D9%88%DB%8C%DB%8C-%28Magic-Bitboards%29-%D9%88-%D8%AC%D8%B3%D8%AA%D8%AC%D9%88%DB%8C-%D8%AE%D8%A7%D9%85%D9%88%D8%B4%DB%8C-%D8%AF%D8%B1-%D9%85%D9%88%D8%AA%D9%88%D8%B1%D9%87%D8%A7%DB%8C-%D9%85%D8%AF%D8%B1%D9%86-%D8%B4%D8%B7%D8%B1%D9%86%D8%AC">ترکیبیات محاسباتی، ماتریس‌های بیتی جادویی (Magic Bitboards) و جستجوی خاموشی در موتورهای مدرن شطرنج</a> <span class="host">boardgamestheory.blogsazan.com</span></li>
+<li><a href="https://boardgamestheory.blogsky.com/1405/07/14/post-2/">ترکیبیات محاسباتی، ماتریس‌های بیتی جادویی (Magic Bitboards) و جستجوی خاموشی در موتورهای مدرن شطرنج</a> <span class="host">boardgamestheory.blogsky.com</span></li>
+<li><a href="https://boardgamestheory.loxblog.com/magic-bitboards-quiescence-chess-engines">ترکیبیات محاسباتی، ماتریس‌های بیتی جادویی (Magic Bitboards) و جستجوی خاموشی در موتورهای مدرن شطرنج</a> <span class="host">boardgamestheory.loxblog.com</span></li>
+<li><a href="https://boardgamestheory.najiblog.ir/post/3/magic-bitboards-quiescence-chess-engines">ترکیبیات محاسباتی، ماتریس‌های بیتی جادویی (Magic Bitboards) و بهینه‌سازی الگوریتم‌های جستجو در شطرنج</a> <span class="host">boardgamestheory.najiblog.ir</span></li>
+<li><a href="http://boardgamestheory.parsiblog.com/Posts/1/">ترکیبیات محاسباتی، ماتریس‌های بیتی جادویی (Magic Bitboards) و بهینه‌سازی الگوریتم‌های جستجو در شطرنج</a> <span class="host">boardgamestheory.parsiblog.com</span></li>
+<li><a href="https://noktenevis.ir/SO94">پیچیدگی ترکیبیاتی، مجیک بیت‌بوردها و الگوریتم‌های جستجوی پیشرفته در موتورهای شطرنج</a> <span class="host">noktenevis.ir</span></li>
+<li><a href="https://omigo.ir/post/dgoq">پیچیدگی ترکیبیاتی، مجیک بیت‌بوردها و الگوریتم‌های جستجوی پیشرفته در موتورهای شطرنج</a> <span class="host">omigo.ir</span></li>
+<li><a href="https://rezhimvakhavas.site123.me/وبلاگ/تحلیل-ریاضی-فضاهای-حالت-در-شطرنج-از-عدد-شانون-و-ماتریس-های-بیتی-جادویی-magic-bitboards-تا-جستجوی-خاموشی-quiescence-search">تحلیل ریاضی فضاهای حالت در شطرنج: از عدد شانون و ماتریس‌های بیتی جادویی (Magic Bitboards) تا جستجوی خاموشی (Quiescence Search)</a> <span class="host">rezhimvakhavas.site123.me</span></li>
+<li><a href="https://zozeyebad.blogfa.com/post/13">پیچیدگی ترکیبیاتی، مجیک بیت‌بوردها و الگوریتم‌های جستجوی پیشرفته در موتورهای شطرنج</a> <span class="host">zozeyebad.blogfa.com</span></li>
+</ul>
+<h3>Polish</h3><ul>
+<li><a href="https://teoria-gier-planszowych.blogspot.com/2026/10/architektura-silnikow-szachowych-64.html">Architektura Silników Szachowych: 64-Bitowe Magic Bitboards, Przycinanie Alfa-Beta i Quiescence Search</a> <span class="host">teoria-gier-planszowych.blogspot.com</span></li>
+<li><a href="https://www.hejto.pl/wpis/architektura-wspolczesnych-silnikow-szachowych-64-bitowe-magic-bitboards-przycin">Architektura Współczesnych Silników Szachowych: 64-Bitowe Magic Bitboards, Przycinanie Alfa-Beta i Quiescence Search</a> <span class="host">www.hejto.pl</span></li>
+<li><a href="https://www.salon24.pl/u/boardgamestheory/1525940,architektura-wspolczesnych-silnikow-szachowych-64-bitowe-magic-bitboards-przycinanie-alfa-beta-i-quiescence-search">Architektura Współczesnych Silników Szachowych: 64-Bitowe Magic Bitboards, Przycinanie Alfa-Beta i Quiescence Search</a> <span class="host">www.salon24.pl</span></li>
+</ul>
+<h3>Portuguese</h3><ul>
+<li><a href="https://www.tabnews.com.br/boardgamestheory/arquitetura-de-motores-de-xadrez-magic-bitboards-de-64-bits-poda-alfa-beta-e-busca-em-quiescencia">Arquitetura de Motores de Xadrez: Magic Bitboards de 64 bits, Poda Alfa-Beta e Busca em Quiescência</a> <span class="host">www.tabnews.com.br</span></li>
+</ul>
+<h3>Russian</h3><ul>
+<li><a href="https://game-theory-analysis-production.up.railway.app/arhitektura-shahmatnyh-dvizhkov.html">Архитектура современных шахматных движков: 64-битные битборды, альфа-бета отсечение и квантованные нейросети NNUE</a> <span class="host">game-theory-analysis-production.up.railway.app</span></li>
+<li><a href="https://teletype.in/@boardgamestheory/a16H_xc7WXW">Архитектура современных шахматных движков: 64-битные Magic Bitboards и алгоритмы Alpha-Beta отсечения</a> <span class="host">teletype.in</span></li>
+</ul>
+<h3>Spanish</h3><ul>
+<li><a href="https://game-theory-analysis.web.app/arquitectura-motores-ajedrez/">Arquitectura de Motores de Ajedrez Modernos: Magic Bitboards de 64 Bits, Poda Alfa-Beta y Redes Neuronales NNUE</a> <span class="host">game-theory-analysis.web.app</span></li>
+</ul>
+<h3>Swedish</h3><ul>
+<li><a href="https://bradspel-historia-analys.blogspot.com/2026/10/blog-post.html">Schack i den Digitala Tidsåldern: En Omfattande Recension av Spelmotorers Utveckling, Bitboards och Nätverkslatens</a> <span class="host">bradspel-historia-analys.blogspot.com</span></li>
+<li><a href="https://bradspel-historia-analys.blogspot.com/2026/10/schackmotorns-arkitektur-64-bitars.html">Schackmotorns Arkitektur: 64-Bitars Magic Bitboards, Alfa-Beta-Beskärning och Quiescence Search</a> <span class="host">bradspel-historia-analys.blogspot.com</span></li>
+</ul>
+<h3>Turkish</h3><ul>
+<li><a href="https://oyun-teorisi-analitik.blogspot.com/2026/10/satranc-motoru-mimarisi-64-bit-bitboard.html">Satranç Motoru Mimarisi: 64-Bit Bitboard Temsili, Magic Bitboards ve Quiescence Arama</a> <span class="host">oyun-teorisi-analitik.blogspot.com</span></li>
+</ul>
+</section>
+<section id="checkers"><h2>Checkers and draughts <span class="count">81</span></h2>
+<p class="blurb">32-bit board representations, mandatory-capture move generation, endgame databases and the proof that 8x8 checkers is a draw.</p>
+<h3>English</h3><ul>
+<li><a href="https://6ac17036e66f9.site123.me/blog/combinatorial-complexity-and-algorithmic-state-spaces-in-draughts-solvers-from-swar-bitboards-to-retrograde-tablebase-synthesis">Combinatorial Complexity and Algorithmic State Spaces in Draughts Solvers: From SWAR Bitboards to Retrograde Tablebase Synthesis</a> <span class="host">6ac17036e66f9.site123.me</span></li>
+<li><a href="https://board-games-theory.gitbook.io/board-games-theory-docs/bitboard-representations-move-generation-and-alpha-beta-pruning-in-draughts-solvers">Bitboard Representations Move Generation and Alpha Beta Pruning in Draughts Solvers</a> <span class="host">board-games-theory.gitbook.io</span></li>
+<li><a href="https://boardgamestheory.bearblog.dev/why-perfect-play-in-8x8-checkers-guarantees-a-draw/">Why Perfect Play in 8x8 Checkers Guarantees a Draw: Analyzing the Chinook Solution</a> <span class="host">boardgamestheory.bearblog.dev</span></li>
+<li><a href="https://boardgamestheory.codeberg.page/checkers-architecture.html">Algorithmic Architecture of Solved Checkers Engines: 32-Bit Bitboards, Mandatory Capture Branching, and Retrograde Analysis</a> <span class="host">boardgamestheory.codeberg.page</span></li>
+<li><a href="https://boardgamestheory.mataroa.blog/blog/the-asymmetry-of-king-mobility-in-english-checkers-vs-international-draughts/">The Asymmetry of King Mobility in English Checkers vs International Draughts</a> <span class="host">boardgamestheory.mataroa.blog</span></li>
+<li><a href="https://boardgamestheory.mataroa.blog/blog/retrograde-value-iteration-proof-number-search-and-bitboard-mechanics-in-solved-draughts-systems/">Retrograde Value Iteration, Proof-Number Search, and Bitboard Mechanics in Solved Draughts Systems</a> <span class="host">boardgamestheory.mataroa.blog</span></li>
+<li><a href="https://boardgamestheory.surge.sh/draughts-solvers/">Computational Draughts Architecture: 32-Bit Bitboards, Mandatory Capture Pruning, and Retrograde Value Iteration</a> <span class="host">boardgamestheory.surge.sh</span></li>
+<li><a href="https://boardgamestheory.ucoz.net/combinatorial-complexity-algorithmic-state-spaces-draughts-solvers">Combinatorial Complexity and Algorithmic State Spaces in Draughts Solvers: From SWAR Bitboards to Retrograde Tablebase Synthesis</a> <span class="host">boardgamestheory.ucoz.net</span></li>
+<li><a href="https://boardgamestheory.weebly.com/blog/algorithmic-architecture-of-solved-checkers-engines-32-bit-bitboards-mandatory-capture-branching-and-retrograde-analysis">Algorithmic Architecture of Solved Checkers Engines: 32-Bit Bitboards, Mandatory Capture Branching, and Retrograde Analysis</a> <span class="host">boardgamestheory.weebly.com</span></li>
+<li><a href="https://boardgamestheory.wordpress.com/2026/10/03/the-forced-jump-dilemma-in-draughts-strategic-sacrifice-vs-tactical-traps/">The Forced Jump Dilemma in Draughts: Strategic Sacrifice vs Tactical Traps</a> <span class="host">boardgamestheory.wordpress.com</span></li>
+<li><a href="https://boardgamestheory.zohosites.eu/blogs/post/combinatorial-complexity-and-algorithmic-state-spaces-in-draughts-solvers">Combinatorial Complexity and Algorithmic State Spaces in Draughts Solvers</a> <span class="host">boardgamestheory.zohosites.eu</span></li>
+<li><a href="https://buy-vpnservice.blogspot.com/2026/10/computational-solvers-32-bit-bitboard.html">Computational Solvers, 32-Bit Bitboard Topologies, and Retrograde Analysis in Classical Draughts</a> <span class="host">buy-vpnservice.blogspot.com</span></li>
+<li><a href="https://coda.io/@payam/teoria-dei-giochi-e-algoritmi-scacchi-dama-e-backgammon/risoluzione-computazionale-della-dama-8x8-basi-di-dati-chinook-e-2">Risoluzione Computazionale della Dama 8x8: Basi di Dati Chinook e Registri a 32 Bit</a> <span class="host">coda.io</span></li>
+<li><a href="https://cosmos47.com/post/computational-solvers-32-bit-bitboards-and-retrograde-analysis-in-checkers">Computational Solvers, 32-Bit Bitboards, and Retrograde Analysis in Checkers</a> <span class="host">cosmos47.com</span></li>
+<li><a href="https://dev.to/payamprivate/low-latency-2d-canvas-pipelines-vs-dom-overhead-in-real-time-web-draughts-5en1">Low-Latency 2D Canvas Pipelines vs DOM Overhead in Real-Time Web Draughts</a> <span class="host">dev.to</span></li>
+<li><a href="https://gamestechai.blogspot.com/2026/10/bitboard-topologies-quiescence-search.html">Bitboard Topologies, Quiescence Search, and Transposition Networks in High-Performance Checkers Engines</a> <span class="host">gamestechai.blogspot.com</span></li>
+<li><a href="https://gist.github.com/poyeshsoftware/12d1e060e49906cebb84308d041b85fc">Retrograde Analysis and Endgame Tablebases in Solved Zero-Sum Checkers (8x8 Draughts)</a> <span class="host">gist.github.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/game-theory-analysis/-/blob/main/checkers-architecture.md">Algorithmic Architecture of Solved Checkers Engines: 32-Bit Bitboards, Mandatory Capture Branching, and Retrograde Analysis</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://justpaste.it/adq2b">Computational Solvers, 32-Bit Bitboards, and Retrograde Analysis in Checkers</a> <span class="host">justpaste.it</span></li>
+<li><a href="https://nrwd9l.webmepage.com/board-games-theory-analysis/draughts-architecture">Modern Draughts Architecture: Combinatorial Solvers &amp; Bitboards</a> <span class="host">nrwd9l.webmepage.com</span></li>
+<li><a href="https://paper.wf/boardgamestheory/modern-draughts-architecture-a-comprehensive-review-of-mandatory-capture">Modern Draughts Architecture: A Comprehensive Review of Mandatory Capture Mechanics and Solved Game Solvers</a> <span class="host">paper.wf</span></li>
+<li><a href="https://payamghaderkourehpaz530787.substack.com/p/algorithmic-architecture-of-solved">Algorithmic Architecture of Solved Checkers Engines</a> <span class="host">payamghaderkourehpaz530787.substack.com</span></li>
+<li><a href="https://payamprivate.tumblr.com/post/829625076353761280">Combinatorial State Spaces and Proof-Number Search in Solved Draughts Games</a> <span class="host">payamprivate.tumblr.com</span></li>
+<li><a href="https://peyman.voog.com/blog/computational-draughts-solvers">Computational Draughts Architecture: 32-Bit Bitboards, Mandatory Capture Dynamics, and Chinook Tablebases</a> <span class="host">peyman.voog.com</span></li>
+<li><a href="https://poyeshsoftware.github.io/checkers-theory/">Retrograde Analysis and Endgame Tablebase Verification in Solved 8x8 Draughts (Checkers)</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://poyeshsoftware.github.io/checkers-theory/draughts-variants-combinatorics.html">Combinatorial Divergence in Draughts: English 8x8 Short Kings vs International 10x10 Flying Kings and Majority Capture</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://poyeshsoftware.github.io/checkers-theory/bitboard-representation-and-alpha-beta-pruning.html">Bitboard Representation and Move Generation Efficiency in Solved 8x8 Draughts Engines</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://sites.google.com/view/checkers-draughts-theory">Combinatorial Game Solvers: Mandatory Capture Dynamics and Bitboard Optimization in 8x8 Draughts</a> <span class="host">sites.google.com</span></li>
+<li><a href="https://spieltheorie-algorithmen.blogspot.com/2026/10/bitboard-topologien-swar-parallelismus.html">Bitboard-Topologien, SWAR-Parallelismus und retrograde Endspieldatenbanken in Damesolvers</a> <span class="host">spieltheorie-algorithmen.blogspot.com</span></li>
+<li><a href="https://tabletop-analysis.blogspot.com/2026/10/combinatorial-game-solvers-mandatory.html">Combinatorial Game Solvers: Mandatory Capture Dynamics and Bitboard Optimization in 8x8 Draughts</a> <span class="host">tabletop-analysis.blogspot.com</span></li>
+<li><a href="https://telegra.ph/The-Anatomy-of-a-Double-Corner-Trap-in-American-8x8-Checkers-10-03">The Anatomy of a Double-Corner Trap in American 8x8 Checkers</a> <span class="host">telegra.ph</span></li>
+<li><a href="https://telegra.ph/The-Mechanics-of-Opposition-and-Triangular-Traps-in-Solved-8x8-Draughts-Endgames-10-05">The Mechanics of Opposition and Triangular Traps in Solved 8x8 Draughts Endgames</a> <span class="host">telegra.ph</span></li>
+<li><a href="https://telegra.ph/Tactical-Shot-Combinatorics-In-and-Out-Pitches-and-Forcing-Sequences-in-8x8-Draughts-10-05">Tactical Shot Combinatorics, In-and-Out Pitches, and Forcing Sequences in 8x8 Draughts</a> <span class="host">telegra.ph</span></li>
+<li><a href="https://ultramarine-crab-1193vv9tabletopanalysis.mystrikingly.com/blog/bitboard-topologies-and-directed-acyclic-jump-chains-in-draughts-solvers">Bitboard Topologies and Directed Acyclic Jump Chains in Draughts Solvers</a> <span class="host">ultramarine-crab-1193vv9tabletopanalysis.mystrikingly.com</span></li>
+<li><a href="https://ultramarine-crab-1193vv9tabletopanalysis.mystrikingly.com/blog/retrograde-analysis-and-endgame-tablebase-verification-in-solved-8x8-draughts">Retrograde Analysis and Endgame Tablebase Verification in Solved 8x8 Draughts</a> <span class="host">ultramarine-crab-1193vv9tabletopanalysis.mystrikingly.com</span></li>
+<li><a href="https://ultramarine-crab-1193vv9tabletopanalysis.mystrikingly.com/blog/combinatorial-divergence-in-draughts-english-8x8-short-kings-vs">Combinatorial Divergence in Draughts: English 8x8 Short Kings vs International 10x10 Flying Kings and Majority Capture</a> <span class="host">ultramarine-crab-1193vv9tabletopanalysis.mystrikingly.com</span></li>
+<li><a href="https://write.as/2tq35dwhtb6y8">Retrograde Value Iteration and Topological Sort in Cyclic Draughts Endgames</a> <span class="host">write.as</span></li>
+<li><a href="https://www.quora.com/Has-our-enthusiasm-about-playing-checkers-been-affected-by-it-being-solved-as-a-drawn-game/answer/Payam-Private">Has our enthusiasm about playing checkers been affected by it being solved as a drawn game?</a> <span class="host">www.quora.com</span></li>
+</ul>
+<h3>Danish / Norwegian</h3><ul>
+<li><a href="https://gammontheory.vivaldi.net/2026/10/06/matematisk-losning-av-8x8-dam-checkers-32-bits-bitboards-og-chinook-sluttspilldatabaser/">Matematisk Løsning av 8x8 Dam (Checkers): 32-bits Bitboards og Chinook Sluttspilldatabaser</a> <span class="host">gammontheory.vivaldi.net</span></li>
+</ul>
+<h3>Dutch</h3><ul>
+<li><a href="https://teoria-juegos-tablero.blogspot.com/2026/10/representacion-de-bitboards-cadenas-de.html">Representación de Bitboards, Cadenas de Captura Acíclicas y Análisis Retrógrado en Solucionadores de Damas</a> <span class="host">teoria-juegos-tablero.blogspot.com</span></li>
+<li><a href="https://teoriadejogos.comunidades.net/resolucao-do-jogo-de-damas-e-bases-de-finais-chinook-bitboards-de-32-bits-e-swar">Resolução do Jogo de Damas e Bases de Finais Chinook: Bitboards de 32 Bits e SWAR</a> <span class="host">teoriadejogos.comunidades.net</span></li>
+<li><a href="https://www.tabnews.com.br/boardgamestheory/resolucao-matematica-do-jogo-de-damas-8x8-bitboards-de-32-bits-swar-e-bases-de-finais-chinook">Resolução Matemática do Jogo de Damas 8x8: Bitboards de 32 Bits, SWAR e Bases de Finais Chinook</a> <span class="host">www.tabnews.com.br</span></li>
+</ul>
+<h3>French</h3><ul>
+<li><a href="https://gametheory-algorithms.vercel.app/dame-algorithmen-chinook/">Mathematische Lösung des 8x8 Damespiels: SWAR-Generatoren und Chinooks 39-Billionen-Stellungen</a> <span class="host">gametheory-algorithms.vercel.app</span></li>
+<li><a href="https://rentry.co/resolution-mathematique-dames-fr">Résolution Mathématique du Jeu de Dames 8x8 : Bitboards Compacts 32-bits et Bases de Données Rétrogrades Chinook</a> <span class="host">rentry.co</span></li>
+<li><a href="https://theorie-jeux-plateau.blogspot.com/2026/10/architecture-computationnelle-des.html">Architecture Computationnelle des Solveurs de Dames Classiques : Bitboards 32 Bits, Règle de Prise Obligatoire et Théorie des Jeux Résolus</a> <span class="host">theorie-jeux-plateau.blogspot.com</span></li>
+<li><a href="https://theorie-jeux-plateau.netlify.app/resolution-dames-chinook/">Résolution Mathématique du Jeu de Dames 8x8 : Générateurs SWAR et les 39 Billions d&#x27;États de Chinook</a> <span class="host">theorie-jeux-plateau.netlify.app</span></li>
+<li><a href="https://theoriejeuxplateau.wordpress.com/2026/10/05/topologies-de-bitboards-et-arbres-de-recherche-alpha-beta-dans-les-solveurs-de-dames/">Topologies de Bitboards et Arbres de Recherche Alpha-Bêta dans les Solveurs de Dames</a> <span class="host">theoriejeuxplateau.wordpress.com</span></li>
+</ul>
+<h3>German</h3><ul>
+<li><a href="https://brettspielkulturundtheorie.wordpress.com/2026/10/06/moderne-damespiel-architektur-schlagzwang-kombinatorische-raumbeherrschung-und-digitale-umsetzung/">Moderne Damespiel-Architektur: Schlagzwang, kombinatorische Raumbeherrschung und digitale Umsetzung</a> <span class="host">brettspielkulturundtheorie.wordpress.com</span></li>
+<li><a href="https://spieltheorie-analytik.jimdofree.com/2026/10/05/zobrist-hashing-transpositionstabellen-und-quiescence-search-in-modernen-schach-und-damespiel-architekturen/">Zobrist-Hashing, Transpositionstabellen und Quiescence Search in Modernen Schach- und Damespiel-Architekturen</a> <span class="host">spieltheorie-analytik.jimdofree.com</span></li>
+</ul>
+<h3>Italian</h3><ul>
+<li><a href="https://game-theory-docs.readthedocs.io/en/latest/risoluzione-dama-chinook/">Risoluzione Computazionale della Dama 8x8: Chinook, Spazio degli Stati e Database di Finale</a> <span class="host">game-theory-docs.readthedocs.io</span></li>
+<li><a href="https://hackmd.io/ZAbJohaXQG-rEtf73w4thQ">Risoluzione Matematica della Dama (8x8): Bitboard a 32 Bit, SWAR e Basi dei Finali Chinook</a> <span class="host">hackmd.io</span></li>
+<li><a href="https://teoria-giochi-da-tavolo.blogspot.com/2026/10/architettura-computazionale-dei_01268229577.html">Architettura Computazionale dei Solutori di Dama Classica: Bitboard a 32 Bit, Regola di Presa Obbligatoria e Teoria dei Giochi Risolti</a> <span class="host">teoria-giochi-da-tavolo.blogspot.com</span></li>
+</ul>
+<h3>Japanese</h3><ul>
+<li><a href="https://ameblo.jp/boardgamestheory/entry-12980804737.html">完全解析チェッカー・エンジンの計算機アーキテクチャと後退解析</a> <span class="host">ameblo.jp</span></li>
+<li><a href="https://khavasemavad.hatenablog.com/entry/2026/10/06/061850">現代チェッカーの計算論的アーキテクチャ：強制捕獲規則、ビットボード最適化、および完全解析ゲーム理論</a> <span class="host">khavasemavad.hatenablog.com</span></li>
+<li><a href="https://zenn.dev/boardgammon/articles/40353f1b357fb5">完全解析チェッカー・エンジンの計算機アーキテクチャ：32ビット・ビットボード表現、強制捕獲ダイナミクス、および後退解析データベース</a> <span class="host">zenn.dev</span></li>
+</ul>
+<h3>Korean</h3><ul>
+<li><a href="https://velog.io/@boardgamestheory/체커Draughts의-조합-게임-이론-강제-포획-규칙-비트보드-최적화-및-현대적-게임-엔진-분석">체커(Draughts)의 조합 게임 이론: 강제 포획 규칙, 비트보드 최적화 및 현대적 게임 엔진 분석</a> <span class="host">velog.io</span></li>
+<li><a href="https://velog.io/@boardgamestheory/8x8-%EC%B2%B4%EC%BB%A4%EC%9D%98-%EC%99%84%EC%A0%84-%EC%88%98%ED%95%99%EC%A0%81-%ED%95%B4%EA%B2%B0-32%EB%B9%84%ED%8A%B8-%EB%B9%84%ED%8A%B8%EB%B3%B4%EB%93%9C%EC%99%80-Chinook-10%EA%B8%B0%EB%AC%BC-%EC%97%AD%ED%96%89-%EB%B6%84%EC%84%9D-%ED%85%8C%EC%9D%B4%EB%B8%94%EB%B2%A0%EC%9D%B4%EC%8A%A4">8x8 체커의 완전 수학적 해결: 32비트 비트보드와 Chinook 10기물 역행 분석 테이블베이스</a> <span class="host">velog.io</span></li>
+</ul>
+<h3>Persian</h3><ul>
+<li><a href="https://boardgamestheory.blogsazan.com/post/3YmV/%D8%AA%D8%AD%D9%84%DB%8C%D9%84-%D9%BE%D8%B3%E2%80%8C%D8%B1%D9%88%D9%86%D8%AF%D9%87-%28Retrograde-Analysis%29%D8%8C-%D9%81%D8%B6%D8%A7%D9%87%D8%A7%DB%8C-%D8%AD%D8%A7%D9%84%D8%AA-%DB%B3%DB%B2-%D8%A8%DB%8C%D8%AA%DB%8C-%D9%88-%D8%AD%D9%84-%D9%86%D8%B8%D8%B1%DB%8C-%D8%A8%D8%A7%D8%B2%DB%8C-%DA%86%DA%A9%D8%B1%D8%B2-%DB%B8%C3%97%DB%B8">تحلیل پس‌رونده (Retrograde Analysis)، فضاهای حالت ۳۲ بیتی و حل نظری بازی چکرز ۸×۸</a> <span class="host">boardgamestheory.blogsazan.com</span></li>
+<li><a href="https://boardgamestheory.blogsky.com/1405/07/14/post-3/">تحلیل پس‌رونده (Retrograde Analysis)، فضاهای حالت ۳۲ بیتی و حل نظری بازی چکرز ۸×۸</a> <span class="host">boardgamestheory.blogsky.com</span></li>
+<li><a href="https://boardgamestheory.loxblog.com/retrograde-analysis-checkers-32bit">تحلیل پس‌رونده (Retrograde Analysis)، فضاهای حالت ۳۲ بیتی و حل نظری بازی چکرز ۸×۸</a> <span class="host">boardgamestheory.loxblog.com</span></li>
+<li><a href="https://boardgamestheory.najiblog.ir/post/4/retrograde-analysis-checkers-32bit">تحلیل پس‌رونده (Retrograde Analysis)، پایگاه داده‌های پایان‌بازی و حل کامل ریاضی بازی چکرز</a> <span class="host">boardgamestheory.najiblog.ir</span></li>
+<li><a href="http://boardgamestheory.parsiblog.com/Posts/2/">تحلیل پس‌رونده (Retrograde Analysis)، پایگاه داده‌های پایان‌بازی و حل کامل ریاضی بازی چکرز</a> <span class="host">boardgamestheory.parsiblog.com</span></li>
+<li><a href="https://noktenevis.ir/F9XO">حل محاسباتی چکرز، توپولوژی بیت‌بوردهای ۳۲ بیتی و پایگاه داده‌های رتروگرید Chinook</a> <span class="host">noktenevis.ir</span></li>
+<li><a href="https://omigo.ir/post/dgoo">حل محاسباتی چکرز، توپولوژی بیت‌بوردهای ۳۲ بیتی و پایگاه داده‌های رتروگرید Chinook</a> <span class="host">omigo.ir</span></li>
+<li><a href="https://rezhimvakhavas.site123.me/وبلاگ/ترکیبیات-محاسباتی-و-نظریه-بازی-های-حل-شده-ساختار-ریاضی-پایگاه-داده-آخر-بازی-tablebases-در-بازی-چکرز-و-دوز">ترکیبیات محاسباتی و نظریه بازی‌های حل‌شده: ساختار ریاضی پایگاه داده آخر بازی (Tablebases) در بازی چکرز و دوز</a> <span class="host">rezhimvakhavas.site123.me</span></li>
+<li><a href="https://yoozbit.com/boardgames">حل محاسباتی بازی چکرز و دیتابیس رتروگرید</a> <span class="host">yoozbit.com</span></li>
+<li><a href="https://zozeyebad.blogfa.com/post/14">تحلیل پس‌رونده (Retrograde Analysis)، پایگاه داده‌های پایان‌بازی و حل کامل ریاضی بازی چکرز</a> <span class="host">zozeyebad.blogfa.com</span></li>
+</ul>
+<h3>Polish</h3><ul>
+<li><a href="https://braetspil-historie-analyse.blogspot.com/2026/10/klassisk-damespil-i-den-digitale-ra.html">Klassisk damespil i den digitale æra: Obligatorisk slagmekanik, 8x8 vs 10x10 og moderne algoritmer</a> <span class="host">braetspil-historie-analyse.blogspot.com</span></li>
+<li><a href="https://teoria-gier-planszowych.blogspot.com/2026/10/architektura-obliczeniowa-silnikow.html">Architektura Obliczeniowa Silników Warcabowych: 32-Bitowe Bitboardy, Reguła Przymusu Bicia i Teoria Gier Rozwiązanych</a> <span class="host">teoria-gier-planszowych.blogspot.com</span></li>
+<li><a href="https://www.hejto.pl/wpis/rozwiazanie-matematyczne-gry-w-warcaby-8x8-32-bitowe-bitboardy-i-bazy-koncowek-c">Rozwiązanie Matematyczne Gry w Warcaby (8x8): 32-Bitowe Bitboardy i Bazy Końcówek Chinook</a> <span class="host">www.hejto.pl</span></li>
+<li><a href="https://www.salon24.pl/u/boardgamestheory/1525941,rozwiazanie-matematyczne-gry-w-warcaby-8x8-32-bitowe-bitboardy-i-bazy-koncowek-chinook">Rozwiązanie Matematyczne Gry w Warcaby (8x8): 32-Bitowe Bitboardy i Bazy Końcówek Chinook</a> <span class="host">www.salon24.pl</span></li>
+</ul>
+<h3>Portuguese</h3><ul>
+<li><a href="https://teoria-jogos-tabuleiro.blogspot.com/2026/10/arquitetura-computacional-dos.html">Arquitetura Computacional dos Solucionadores de Damas Clássicas: Bitboards de 32 Bits, Regra de Captura Obrigatória e Teoria dos Jogos Resolvidos</a> <span class="host">teoria-jogos-tabuleiro.blogspot.com</span></li>
+</ul>
+<h3>Russian</h3><ul>
+<li><a href="https://game-theory-analysis-production.up.railway.app/reshenie-shashek-chinook.html">Компьютерное решение шашек 8x8: система Chinook, базы окончаний и алгоритмы ретроспективного анализа</a> <span class="host">game-theory-analysis-production.up.railway.app</span></li>
+<li><a href="https://teletype.in/@boardgamestheory/2sortHCjl1Q">Математика шашек 8x8: 32-битные битовые маски, эндшпильные базы и наследие Chinook</a> <span class="host">teletype.in</span></li>
+</ul>
+<h3>Spanish</h3><ul>
+<li><a href="https://culturayjuegosdetablero.wordpress.com/2026/10/05/de-alquerque-a-las-damas-clasicas-resena-historica-mecanica-de-captura-obligatoria-y-soluciones-computacionales/">De Alquerque a las Damas Clásicas: Reseña Histórica, Mecánica de Captura Obligatoria y Soluciones Computacionales</a> <span class="host">culturayjuegosdetablero.wordpress.com</span></li>
+<li><a href="https://game-theory-analysis.web.app/resolucion-damas-chinook/">Resolución Computacional de las Damas 8x8: Generadores SWAR y las Bases de Datos Chinook de 39 Billones de Posiciones</a> <span class="host">game-theory-analysis.web.app</span></li>
+<li><a href="https://my-website-enuv7b.webnode.page/l/representacion-de-bitboards-y-optimizacion-de-heuristicas-en-motores-modernos-de-damas-y-ajedrez/">Representación de Bitboards y Optimización de Heurísticas en Motores Modernos de Damas y Ajedrez</a> <span class="host">my-website-enuv7b.webnode.page</span></li>
+</ul>
+<h3>Swedish</h3><ul>
+<li><a href="https://nouw.com/bradspelsteori/kombinatorisk-analys-av-internationellt-damspel-slagplikt-och-slutspelsdatabaser-38746109">Kombinatorisk analys av internationellt damspel: Slagplikt och slutspelsdatabaser</a> <span class="host">nouw.com</span></li>
+</ul>
+<h3>Turkish</h3><ul>
+<li><a href="https://eksisozluk.com/entry/186941219">Satranç Motoru Mimarisi: 64-Bit Bitboard&#x27;lar, Magic Bitboard Hash Fonksiyonları ve Alfa-Beta Budaması</a> <span class="host">eksisozluk.com</span></li>
+<li><a href="https://eksisozluk.com/entry/186941275">Dama Oyununun Çözümü ve Chinook Son Oyun Veritabanı Mimarisi: 32-Bit Bitboard&#x27;lar ve SWAR</a> <span class="host">eksisozluk.com</span></li>
+<li><a href="https://oyun-teorisi-analitik.blogspot.com/2026/10/klasik-dama-motorlarnn-hesaplamal.html">Klasik Dama Motorlarının Hesaplamalı Mimarisi: 32-Bit Bitboard Temsili, Zorunlu Taş Alma Kuralı ve Çözülmüş Oyunlar Teorisi</a> <span class="host">oyun-teorisi-analitik.blogspot.com</span></li>
+</ul>
+</section>
+<section id="backgammon"><h2>Backgammon, probability and fair dice <span class="count">105</span></h2>
+<p class="blurb">Expectiminimax search, bear-off Markov chains, doubling-cube economics and commit-reveal dice that players can verify.</p>
+<h3>English</h3><ul>
+<li><a href="https://6ac17036e66f9.site123.me/blog/stochastic-combinatorics-expectiminimax-bounds-and-markov-decision-processes-in-classical-backgammon">Stochastic Combinatorics, Expectiminimax Bounds, and Markov Decision Processes in Classical Backgammon</a> <span class="host">6ac17036e66f9.site123.me</span></li>
+<li><a href="https://board-games-theory.gitbook.io/checkers-and-draughts-theory/stochastic-markov-decision-processes-and-expectiminimax-optimization-in-classical-dice-games">Stochastic Markov Decision Processes and Expectiminimax Optimization in Classical Dice Games</a> <span class="host">board-games-theory.gitbook.io</span></li>
+<li><a href="https://boardgamestheory.bearblog.dev/algorithmic-state-evaluation-in-classical-board-games-minimax-expectiminimax-and-neural-heuristics/">Algorithmic State Evaluation in Classical Board Games: Minimax, Expectiminimax, and Neural Heuristics</a> <span class="host">boardgamestheory.bearblog.dev</span></li>
+<li><a href="https://boardgamestheory.codeberg.page/stochastic-markov-processes.html">Stochastic Markov Decision Processes and Expectiminimax Optimization in Classical Dice Games</a> <span class="host">boardgamestheory.codeberg.page</span></li>
+<li><a href="https://boardgamestheory.mataroa.blog/blog/the-holding-game-paradox-why-passive-defense-is-backgammons-most-mathematically-fragile-strategy/">The Holding Game Paradox: Why Passive Defense Is Backgammon’s Most Mathematically Fragile Strategy</a> <span class="host">boardgamestheory.mataroa.blog</span></li>
+<li><a href="https://boardgamestheory.mataroa.blog/blog/the-dynamics-of-contact-volatility-evaluating-market-losing-rolls-in-modern-backgammon-engines/">The Dynamics of Contact Volatility: Evaluating Market-Losing Rolls in Modern Backgammon Engines</a> <span class="host">boardgamestheory.mataroa.blog</span></li>
+<li><a href="https://boardgamestheory.surge.sh/game-theory-foundations/">Shannon Number Bounds and Computational Game Complexity: Why Backgammon, Draughts, and Chess Diverge</a> <span class="host">boardgamestheory.surge.sh</span></li>
+<li><a href="https://boardgamestheory.surge.sh/engine-architecture/">Modern Web Engine Architecture: WebRTC Voice Chat, CSPRNG Dice Fairness, and High-Performance 2D Canvas</a> <span class="host">boardgamestheory.surge.sh</span></li>
+<li><a href="https://boardgamestheory.ucoz.net/news/stochastic_decision_processes_expectiminimax_horizons_and_neural_value_functions_in_backgammon_solvers/2026-10-05-2">Stochastic Decision Processes, Expectiminimax Horizons, and Neural Value Functions in Backgammon Solvers</a> <span class="host">boardgamestheory.ucoz.net</span></li>
+<li><a href="https://boardgamestheory.zohosites.eu/blogs/post/stochastic-markov-decision-processes-and-expectiminimax-horizons-in-classical-backgammon">Stochastic Markov Decision Processes and Expectiminimax Horizons in Classical Backgammon</a> <span class="host">boardgamestheory.zohosites.eu</span></li>
+<li><a href="https://buy-vpnservice.blogspot.com/2026/10/minimax-vs-expectiminimax-handling.html">Minimax vs Expectiminimax: Handling Chance Nodes in Strategic Game Trees</a> <span class="host">buy-vpnservice.blogspot.com</span></li>
+<li><a href="https://buy-vpnservice.blogspot.com/2026/10/archaeological-and-combinatorial.html">Archaeological and Combinatorial Evolution of Board Games: From the Royal Game of Ur to Roman Tabula and Sasanian Nard</a> <span class="host">buy-vpnservice.blogspot.com</span></li>
+<li><a href="https://cosmos47.com/post/stochastic-mdps-expectiminimax-trees-and-provably-fair-randomness-in-backgammon">Stochastic MDPs, Expectiminimax Trees, and Provably Fair Randomness in Backgammon</a> <span class="host">cosmos47.com</span></li>
+<li><a href="https://gamestechai.blogspot.com/2026/10/the-resilient-geometry-of-abstract.html">The Resilient Geometry of Abstract Strategy: Why Backgammon, Checkers, and Chess Outlast Every Digital Trend</a> <span class="host">gamestechai.blogspot.com</span></li>
+<li><a href="https://gist.github.com/poyeshsoftware/bdd0416e200097ea08145c86d8c95017">Anchor Point Geometry, Home Board Primes, and Timing Invariants in High-Performance Backgammon Engines</a> <span class="host">gist.github.com</span></li>
+<li><a href="https://gist.github.com/poyeshsoftware/7ba73119e7cd551d1a7e23e37cf2c69e">Opening Roll Combinatorics and Initial Anchor Placement in Modern Backgammon Theory</a> <span class="host">gist.github.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/game-theory-analysis/-/blob/main/stochastic-markov-processes.md">Stochastic Markov Decision Processes and Expectiminimax Optimization in Classical Dice Games</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/backgammon-theory/-/blob/main/stochastic-state-trees-commit-reveal-dice.md">Stochastic State Trees, Expectiminimax Horizons, and Cryptographic Commit-Reveal Dice Protocols in Modern Backgammon Engines</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/backgammon-theory/-/blob/main/absorbing-markov-chains-bearoff-solvers.md">Absorbing Markov Chains, Fundamental Matrices, and Exact Analytical Bearoff Solvers</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/backgammon-theory/-/blob/main/doubling-cube-options-pricing-janowski.md">Continuous Financial Options Pricing, Janowski Match Equity Formulas, and Doubling Cube Economics</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://justpaste.it/hdsj9">Stochastic MDPs, Expectiminimax, and Provably Fair Randomness in Backgammon</a> <span class="host">justpaste.it</span></li>
+<li><a href="https://medium.com/@payamprivate/demystifying-the-doubling-cube-how-a-1920s-rule-transformed-backgammon-into-an-applied-probability-484488cb452a">Demystifying the Doubling Cube: How a 1920s Rule Transformed Backgammon into an Applied Probability Engine</a> <span class="host">medium.com</span></li>
+<li><a href="https://medium.com/@payamprivate/absorbing-markov-chains-fundamental-matrices-and-exact-analytical-bearoff-solvers-in-stochastic-fb66da3a7c78">Absorbing Markov Chains, Fundamental Matrices, and Exact Analytical Bearoff Solvers in Stochastic Race Games</a> <span class="host">medium.com</span></li>
+<li><a href="https://nrwd9l.webmepage.com/board-games-theory-analysis/backgammon-stochastic-mathematics">Backgammon Stochastic Mathematics: Markov Chains &amp; Cube Valuations</a> <span class="host">nrwd9l.webmepage.com</span></li>
+<li><a href="https://paper.wf/boardgamestheory/the-mathematics-of-imperfect-certainty-markov-chains-doubling-cube-option">The Mathematics of Imperfect Certainty: Markov Chains, Doubling Cube Option Pricing, and Backgammon Decision Theory</a> <span class="host">paper.wf</span></li>
+<li><a href="https://payamghaderkourehpaz530787.substack.com/p/the-mathematics-of-backgammon-primes">The Mathematics of Backgammon Primes: Escaping 6-Prime Blockades and Timing Preservation</a> <span class="host">payamghaderkourehpaz530787.substack.com</span></li>
+<li><a href="https://payamghaderkourehpaz530787.substack.com/p/stochastic-markov-decision-processes">Stochastic Markov Decision Processes and Expectiminimax Optimization in Classical Dice Games</a> <span class="host">payamghaderkourehpaz530787.substack.com</span></li>
+<li><a href="https://payamprivate.tumblr.com/post/829440071314849792/the-geometry-of-prime-structures-in-backgammon">The Geometry of Prime Structures in Backgammon: Breaking the 6-Prime Trap</a> <span class="host">payamprivate.tumblr.com</span></li>
+<li><a href="https://peyman.voog.com/blog/stochastic-backgammon-engine-architecture">Stochastic Decision Trees and Doubling Cube Economics in Modern Backgammon Engines</a> <span class="host">peyman.voog.com</span></li>
+<li><a href="https://poyeshsoftware.github.io/game-theory-analysis/neural-evaluation-backgammon.html">The Convergence of Neural Network Evaluation and Monte Carlo Rollouts in Modern Backgammon Engines</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://poyeshsoftware.github.io/game-theory-analysis/doubling-cube-ergodicity-volatility.html">The Ergodicity Problem and Option Pricing of the Doubling Cube in Stochastic Games</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://poyeshsoftware.github.io/backgammon-theory/">Stochastic State Trees, Expectiminimax Horizons, and Cryptographic Commit-Reveal Dice Protocols in Modern Backgammon Engines</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://poyeshsoftware.github.io/backgammon-theory/absorbing-markov-chains-bearoff-solvers.html">Absorbing Markov Chains, Fundamental Matrices, and Exact Analytical Bearoff Solvers</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://poyeshsoftware.github.io/backgammon-theory/doubling-cube-options-pricing-janowski.html">Continuous Financial Options Pricing, Janowski Match Equity Formulas, and Doubling Cube Economics</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://spieltheorie-algorithmen.blogspot.com/2026/10/stochastische-entscheidungsprozesse-und.html">Stochastische Entscheidungsprozesse und Markow-Ketten in Backgammon-Rennendspielen</a> <span class="host">spieltheorie-algorithmen.blogspot.com</span></li>
+<li><a href="https://tabletop-analysis.blogspot.com/2026/10/from-royal-game-of-ur-to-roman-tabula.html">From the Royal Game of Ur to Roman Tabula and Classical Backgammon: Five Millennia of Archaeological Evidence and Combinatorial Board Design</a> <span class="host">tabletop-analysis.blogspot.com</span></li>
+<li><a href="https://tabletop-analysis.blogspot.com/2026/10/blog-post.html">Stochastic Markov Decision Processes, Expectiminimax Chance Trees, and Financial Valuation of the Doubling Cube in Modern Backgammon</a> <span class="host">tabletop-analysis.blogspot.com</span></li>
+<li><a href="https://tabletopanalysis.wordpress.com/2026/10/06/archaeological-foundations-and-combinatorial-board-design-from-the-royal-game-of-ur-to-roman-tabula-and-sasanian-nard/">Archaeological Foundations and Combinatorial Board Design: From the Royal Game of Ur to Roman Tabula and Sasanian Nard</a> <span class="host">tabletopanalysis.wordpress.com</span></li>
+<li><a href="https://telegra.ph/The-Opening-Book-in-Backgammon-Roll-by-Roll-Tactical-Analysis-of-Initial-Turns-10-03">The Opening Book in Backgammon: Roll-by-Roll Tactical Analysis of Initial Turns</a> <span class="host">telegra.ph</span></li>
+<li><a href="https://telegra.ph/The-Doubling-Cube-in-Volatile-Positions-Calculating-Market-Losers-and-Recube-Vig-10-03">The Doubling Cube in Volatile Positions: Calculating Market Losers and Recube Vig</a> <span class="host">telegra.ph</span></li>
+<li><a href="https://telegra.ph/Stochastic-State-Trees-and-Probability-Modeling-in-Classical-Backgammon-10-04">Stochastic State Trees and Probability Modeling in Classical Backgammon</a> <span class="host">telegra.ph</span></li>
+<li><a href="https://wakelet.com/wake/zUxQXxdxhBk74U7K7t9eM">Backgammon Stochastic Mathematics and Doubling Cube Option Pricing</a> <span class="host">wakelet.com</span></li>
+<li><a href="https://wakelet.com/wake/vdrBkAtlDXiHEXeNJVnBx">Stochastic Markov Processes, Expectiminimax Trees, and Fair Dice in Classical Backgammon</a> <span class="host">wakelet.com</span></li>
+<li><a href="https://write.as/juanb1dybxtrp">The Pip Count Fallacy: Why Pure Racing Distance Fails in High-Contact Backgammon Positions</a> <span class="host">write.as</span></li>
+<li><a href="https://www.quora.com/Do-backgammon-apps-cheat-rig-the-dice-to-create-more-spending/answer/Payam-Private">Do backgammon apps cheat / rig the dice to create more spending?</a> <span class="host">www.quora.com</span></li>
+</ul>
+<h3>Danish / Norwegian</h3><ul>
+<li><a href="https://braetspil-historie-analyse.blogspot.com/2026/10/sandsynlighedsteori-fordoblingsterninge.html">Sandsynlighedsteori, fordoblingsterningens matematik og beslutningsgrænser i moderne backgammon</a> <span class="host">braetspil-historie-analyse.blogspot.com</span></li>
+<li><a href="https://gammontheory.vivaldi.net/2026/10/06/stokastiske-markov-beslutningsprosesser-og-kryptografisk-beviselig-rettferdighet-i-backgammon/">Stokastiske Markov-Beslutningsprosesser og Kryptografisk Beviselig Rettferdighet i Backgammon</a> <span class="host">gammontheory.vivaldi.net</span></li>
+</ul>
+<h3>Dutch</h3><ul>
+<li><a href="https://bordspellen-geschiedenis.blogspot.com/2026/10/de-wiskunde-van-onzekerheid.html">De Wiskunde van Onzekerheid: Waarschijnlijkheidsrekening, de Verdubbelingsdobbelsteen en Speltheoretische Beslissingsgrenzen in Backgammon</a> <span class="host">bordspellen-geschiedenis.blogspot.com</span></li>
+<li><a href="https://my-website-enuv7b.webnode.page/l/procesos-de-decision-de-markov-y-dinamica-de-opciones-financieras-en-el-cubo-de-doblaje-de-backgammon/">Procesos de Decisión de Markov y Dinámica de Opciones Financieras en el Cubo de Doblaje de Backgammon</a> <span class="host">my-website-enuv7b.webnode.page</span></li>
+<li><a href="https://teoria-juegos-tablero.blogspot.com/2026/10/matrices-de-transicion-y-cadenas-de.html">Matrices de Transición y Cadenas de Markov en Posiciones de Carrera en Backgammon</a> <span class="host">teoria-juegos-tablero.blogspot.com</span></li>
+</ul>
+<h3>Finnish</h3><ul>
+<li><a href="https://lautapelit-historia-analyysi.blogspot.com/2026/10/tatamipelien-todennakoisyysteoria-ja.html">Lautapelien todennäköisyysteoria ja tuplauskuution matematiikka modernissa backgammonissa</a> <span class="host">lautapelit-historia-analyysi.blogspot.com</span></li>
+</ul>
+<h3>French</h3><ul>
+<li><a href="https://rentry.co/processus-markov-backgammon-fr">Processus de Décision Markoviens Stochastiques et Aléa Cryptographiquement Équitable dans le Backgammon</a> <span class="host">rentry.co</span></li>
+<li><a href="https://theorie-jeux-plateau.blog4ever.com/l-analyse-combinatoire-et-la-theorie-des-jeux-abstraits-des-dames-au-backgammon">L&#x27;Analyse Combinatoire et la Théorie des Jeux Abstraits : Des Dames au Backgammon</a> <span class="host">theorie-jeux-plateau.blog4ever.com</span></li>
+<li><a href="https://theorie-jeux-plateau.blog4ever.com/arbres-de-decision-stochastiques-et-evaluation-neuronale-dans-les-moteurs-de-backgammon-modernes">Arbres de Décision Stochastiques et Évaluation Neuronale dans les Moteurs de Backgammon Modernes</a> <span class="host">theorie-jeux-plateau.blog4ever.com</span></li>
+<li><a href="https://theorie-jeux-plateau.blogspot.com/2026/10/blog-post.html">Du Jeu Royal d&#x27;Ur à la Tabula Romaine et au Backgammon : Cinq Millénaires d&#x27;Archéologie et de Modélisation Combinatoire</a> <span class="host">theorie-jeux-plateau.blogspot.com</span></li>
+<li><a href="https://theorie-jeux-plateau.blogspot.com/2026/10/processus-de-decision-markoviens-arbres.html">Processus de Décision Markoviens, Arbres Expectiminimax et Évaluation Financière du Videau dans le Backgammon Moderne</a> <span class="host">theorie-jeux-plateau.blogspot.com</span></li>
+<li><a href="https://theorie-jeux-plateau.netlify.app/backgammon-processus-markov-des/">Processus de Décision Markoviens et Protocoles de Dés Cryptographiquement Équitables dans le Backgammon</a> <span class="host">theorie-jeux-plateau.netlify.app</span></li>
+<li><a href="https://theoriejeuxplateau.wordpress.com/2026/10/05/processus-de-decision-markoviens-et-evaluation-neuronale-dans-les-moteurs-de-backgammon/">Processus de Décision Markoviens et Évaluation Neuronale dans les Moteurs de Backgammon</a> <span class="host">theoriejeuxplateau.wordpress.com</span></li>
+</ul>
+<h3>German</h3><ul>
+<li><a href="https://brettspielkulturundtheorie.wordpress.com/2026/10/06/die-mathematik-des-backgammon-markov-ketten-janowski-formel-und-der-verdopplungswurfel-als-finanzoption/">Die Mathematik des Backgammon: Markov-Ketten, Janowski-Formel und der Verdopplungswürfel als Finanzoption</a> <span class="host">brettspielkulturundtheorie.wordpress.com</span></li>
+<li><a href="https://gametheory-algorithms.vercel.app/backgammon-stochastik-faire-wuerfel/">Stochastische Markov-Entscheidungsprozesse und kryptografisch faire Würfelprotokolle im Backgammon</a> <span class="host">gametheory-algorithms.vercel.app</span></li>
+<li><a href="https://spieltheorie-algorithmen.blogspot.com/2026/10/blog-post.html">Neuronale Wertungsfunktionen, TD(λ)-Lernen und die Dynamik des Verdopplungswürfels</a> <span class="host">spieltheorie-algorithmen.blogspot.com</span></li>
+<li><a href="https://spieltheorie-analytik.jimdofree.com/stochastische-entscheidungsbaeume-star2-pruning-und-neuronale-bewertungsfunktionen/">Stochastische Entscheidungsbäume, Star2-Pruning und neuronale Bewertungsfunktionen in modernen Backgammon-Engines</a> <span class="host">spieltheorie-analytik.jimdofree.com</span></li>
+</ul>
+<h3>Italian</h3><ul>
+<li><a href="https://coda.io/@payam/teoria-dei-giochi-e-algoritmi-scacchi-dama-e-backgammon/processi-decisionali-di-markov-e-dadi-crittograficamente-verific-3">Processi Decisionali di Markov e Dadi Crittograficamente Verificabili nel Backgammon</a> <span class="host">coda.io</span></li>
+<li><a href="https://game-theory-docs.readthedocs.io/en/latest/backgammon-markov-dadi-crittografici/">Processi Decisionali di Markov e Generazione Crittografica nel Backgammon Moderno</a> <span class="host">game-theory-docs.readthedocs.io</span></li>
+<li><a href="https://hackmd.io/@dn5CHUNtSpaTD85rBs7jqgboardgamestheory/B133TAMoGl">Processi Decisionali di Markov e Correttezza Crittografica nel Backgammon: L&#x27;Algoritmo Expectiminimax e Provably Fair Dice</a> <span class="host">hackmd.io</span></li>
+<li><a href="https://teoria-giochi-da-tavolo.blogspot.com/2026/10/architettura-computazionale-dei.html">Dall&#x27;Antico Gioco Reale di Ur alla Tabula Romana e al Backgammon: Archeologia e Analisi Combinatoria delle Tavole Reali</a> <span class="host">teoria-giochi-da-tavolo.blogspot.com</span></li>
+<li><a href="https://teoria-giochi-da-tavolo.blogspot.com/2026/10/architettura-computazionale-dei_01133874915.html">Processi Decisionali di Markov, Alberi Expectiminimax e Valutazione Finanziaria del Cubo del Raddoppio nel Backgammon</a> <span class="host">teoria-giochi-da-tavolo.blogspot.com</span></li>
+</ul>
+<h3>Japanese</h3><ul>
+<li><a href="https://ameblo.jp/boardgamestheory/entry-12980803612.html">古代ウルからタブラ、バックギャモンへ：5000年の変遷と確率構造</a> <span class="host">ameblo.jp</span></li>
+<li><a href="https://khavasemavad.hatenablog.com/entry/2026/10/06/061819">古代ウルの盤上遊戯から中世バックギャモンまで：5000年にわたる競走ゲームの考古学と文化史</a> <span class="host">khavasemavad.hatenablog.com</span></li>
+<li><a href="https://khavasemavad.hatenablog.com/entry/2026/10/06/061916">バックギャモンの確率論とゲーム理論：36通りの出目分布、ダブリングキューブのアメリカン・オプション評価、およびマルコフ決定過程</a> <span class="host">khavasemavad.hatenablog.com</span></li>
+<li><a href="https://zenn.dev/boardgammon/articles/64f69455156d84">古代ウルの盤上遊戯から中世タブラ、バックギャモンに至る5000年のゲームデザイン変遷と確率論的構造</a> <span class="host">zenn.dev</span></li>
+<li><a href="https://zenn.dev/boardgammon/articles/670f5696841af1">確率的期待値最大化ゲーム木とダブリングキューブの金融工学的評価：現代バックギャモンAIの数理</a> <span class="host">zenn.dev</span></li>
+</ul>
+<h3>Korean</h3><ul>
+<li><a href="https://velog.io/@boardgamestheory/백개먼의-확률론과-게임-이론-36가지-주사위-매트릭스-더블링-큐브의-미국식-옵션-가치-및-마르코프-연쇄">백개먼의 확률론과 게임 이론: 36가지 주사위 매트릭스, 더블링 큐브의 미국식 옵션 가치 및 마르코프 연쇄</a> <span class="host">velog.io</span></li>
+<li><a href="https://velog.io/@boardgamestheory/%EB%B0%B1%EA%B0%9C%EB%A8%BC%EC%9D%98-%ED%99%95%EB%A5%A0%EB%A1%A0%EC%A0%81-%EB%A7%88%EB%A5%B4%EC%BD%94%ED%94%84-%EA%B2%B0%EC%A0%95-%EA%B3%BC%EC%A0%95MDP%EA%B3%BC-HMAC-SHA256-%EC%95%94%ED%98%B8%ED%95%99%EC%A0%81-%EA%B3%B5%EC%A0%95-%EC%A3%BC%EC%82%AC%EC%9C%84Provably-Fair-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C">백개먼의 확률론적 마르코프 결정 과정(MDP)과 HMAC-SHA256 암호학적 공정 주사위(Provably Fair) 프로토콜</a> <span class="host">velog.io</span></li>
+</ul>
+<h3>Persian</h3><ul>
+<li><a href="https://boardgamestheory.blogsazan.com/post/3YmT/%D9%86%D8%B8%D8%B1%DB%8C%D9%87-%D9%81%D8%B1%D8%A2%DB%8C%D9%86%D8%AF%D9%87%D8%A7%DB%8C-%D8%AA%D8%B5%D8%A7%D8%AF%D9%81%DB%8C%D8%8C-%D9%85%D8%A7%D8%AA%D8%B1%DB%8C%D8%B3%E2%80%8C%D9%87%D8%A7%DB%8C-%D8%A7%D8%AD%D8%AA%D9%85%D8%A7%D9%84%D8%A7%D8%AA%DB%8C-%D9%88-%D9%BE%D8%B1%D9%88%D8%AA%DA%A9%D9%84%E2%80%8C%D9%87%D8%A7%DB%8C-%D8%A7%D8%AB%D8%A8%D8%A7%D8%AA-%D8%A7%D9%86%D8%B5%D8%A7%D9%81-%D8%AF%D8%B1-%D8%AA%D8%AD%D9%84%DB%8C%D9%84-%D9%85%D8%AD%D8%A7%D8%B3%D8%A8%D8%A7%D8%AA%DB%8C-%D8%AA%D8%AE%D8%AA%D9%87%E2%80%8C%D9%86%D8%B1%D8%AF">نظریه فرآیندهای تصادفی، ماتریس‌های احتمالاتی و پروتکل‌های اثبات انصاف در تحلیل محاسباتی تخته‌نرد</a> <span class="host">boardgamestheory.blogsazan.com</span></li>
+<li><a href="https://boardgamestheory.blogsky.com/1405/07/14/post-1/">نظریه فرآیندهای تصادفی، ماتریس‌های احتمالاتی و پروتکل‌های اثبات انصاف در تحلیل محاسباتی تخته‌نرد</a> <span class="host">boardgamestheory.blogsky.com</span></li>
+<li><a href="https://boardgamestheory.loxblog.com/stochastic-processes-backgammon-fair-dice">نظریه فرآیندهای تصادفی، ماتریس‌های احتمالاتی و پروتکل‌های اثبات انصاف در تحلیل محاسباتی تخته‌نرد</a> <span class="host">boardgamestheory.loxblog.com</span></li>
+<li><a href="https://boardgamestheory.najiblog.ir/post/5/stochastic-processes-backgammon-fair-dice">نظریه فرآیندهای تصادفی، ماتریس‌های احتمالاتی و پروتکل‌های اثبات انصاف در تحلیل محاسباتی تخته‌نرد</a> <span class="host">boardgamestheory.najiblog.ir</span></li>
+<li><a href="http://boardgamestheory.parsiblog.com/Posts/3/">نظریه فرآیندهای تصادفی، ماتریس‌های احتمالاتی و پروتکل‌های اثبات انصاف در تحلیل محاسباتی تخته‌نرد</a> <span class="host">boardgamestheory.parsiblog.com</span></li>
+<li><a href="https://noktenevis.ir/dwme">فرایندهای تصادفی تصمیم‌گیری مارکوف، الگوریتم Expectiminimax و تاس اثبات‌پذیر عادلانه در تخته نرد</a> <span class="host">noktenevis.ir</span></li>
+<li><a href="https://omigo.ir/post/dgop">فرایندهای تصادفی تصمیم‌گیری مارکوف، الگوریتم Expectiminimax و تاس اثبات‌پذیر عادلانه در تخته نرد</a> <span class="host">omigo.ir</span></li>
+<li><a href="https://rezhimvakhavas.site123.me/وبلاگ/نقش-بازی-های-فکری-و-استراتژیک-شطرنج-و-تخته-نرد-در-تقویت-انعطاف-پذیری-عصبی-و-تمرکز-ذهنی">نقش بازی‌های فکری و استراتژیک (شطرنج و تخته نرد) در تقویت انعطاف‌پذیری عصبی و تمرکز ذهنی</a> <span class="host">rezhimvakhavas.site123.me</span></li>
+<li><a href="https://virgool.io/@payamprivate/doubling-cube-mathematics-game-theory-fisphpyb9axc">تحلیل ریاضی مکعب دو برابر کننده (Doubling Cube) در تخته‌نرد: از نظریه احتمالات تا شبکه‌های عصبی</a> <span class="host">virgool.io</span></li>
+<li><a href="https://virgool.io/@payamprivate/absorbing-markov-chains-backgammon-bearoff-vghhzgpjo38q">زنجیره‌های مارکوف جذب‌کننده، ماتریس گذار و افق زمانی در تحلیل فاز خروج (Bearoff) تخته‌نرد</a> <span class="host">virgool.io</span></li>
+<li><a href="https://zozeyebad.blogfa.com/post/10">تحلیل ریاضی و تئوری بازی‌ها در تخته‌نرد: از مفهوم اکوئیتی تا تصمیم‌گیری در شرایط عدم قطعیت</a> <span class="host">zozeyebad.blogfa.com</span></li>
+<li><a href="https://zozeyebad.blogfa.com/post/11">پیچیدگی محاسباتی و نظریه بازی‌ها: چرا حل کامل شطرنج و تخته‌نرد از توان ابررایانه‌ها فراتر است؟</a> <span class="host">zozeyebad.blogfa.com</span></li>
+<li><a href="https://zozeyebad.blogfa.com/post/12">تحلیل ریاضی درخت‌های تصمیم تصادفی و بهینه‌سازی ارزیابی وضعیت در تخته‌نرد محاسباتی</a> <span class="host">zozeyebad.blogfa.com</span></li>
+</ul>
+<h3>Polish</h3><ul>
+<li><a href="https://teoria-gier-planszowych.blogspot.com/2026/10/blog-post.html">Od Królewskiej Gry z Ur do Rzymskiej Tabuli i Klasycznego Tryktraka: Pięć Tysiącleci Archeologii i Ewolucji Kombinatorycznej</a> <span class="host">teoria-gier-planszowych.blogspot.com</span></li>
+<li><a href="https://teoria-gier-planszowych.blogspot.com/2026/10/procesy-decyzyjne-markowa-drzewa.html">Procesy Decyzyjne Markowa, Drzewa Przeszukiwań Expectiminimax i Finansowa Wycena Kostki Dublującej we Współczesnym Tryktraku</a> <span class="host">teoria-gier-planszowych.blogspot.com</span></li>
+<li><a href="https://www.hejto.pl/wpis/stochastyczne-procesy-decyzyjne-markowa-i-kryptograficznie-sprawdzalna-uczciwosc">Stochastyczne Procesy Decyzyjne Markowa i Kryptograficznie Sprawdzalna Uczciwość Kostek (Commit-Reveal) w Tryktraku</a> <span class="host">www.hejto.pl</span></li>
+<li><a href="https://www.salon24.pl/u/boardgamestheory/1525944,stochastyczne-procesy-decyzyjne-markowa-i-kryptograficznie-sprawdzalna-uczciwosc-kostek-w-tryktraku">Stochastyczne Procesy Decyzyjne Markowa i Kryptograficznie Sprawdzalna Uczciwość Kostek w Tryktraku</a> <span class="host">www.salon24.pl</span></li>
+</ul>
+<h3>Portuguese</h3><ul>
+<li><a href="https://teoria-jogos-tabuleiro.blogspot.com/2026/10/processos-de-decisao-de-markov-arvores.html">Processos de Decisão de Markov, Árvores Expectiminimax e Avaliação Financeira do Cubo no Gamão Moderno</a> <span class="host">teoria-jogos-tabuleiro.blogspot.com</span></li>
+<li><a href="https://teoriadejogos.comunidades.net/processos-decisorios-de-markov-e-justica-criptografica-em-gamao-o-algoritmo-expectiminimax">Processos Decisórios de Markov e Justiça Criptográfica em Gamão: O Algoritmo Expectiminimax</a> <span class="host">teoriadejogos.comunidades.net</span></li>
+<li><a href="https://www.tabnews.com.br/boardgamestheory/processos-decisorios-de-markov-e-justica-criptografica-em-gamao-o-algoritmo-expectiminimax-e-provably-fair-dice">Processos Decisórios de Markov e Justiça Criptográfica em Gamão: O Algoritmo Expectiminimax e Provably Fair Dice</a> <span class="host">www.tabnews.com.br</span></li>
+</ul>
+<h3>Russian</h3><ul>
+<li><a href="https://game-theory-analysis-production.up.railway.app/markovskie-processy-nardy-kosti.html">Поглощающие цепи Маркова, экономика куба удвоения и криптографический протокол честных костей в нардах</a> <span class="host">game-theory-analysis-production.up.railway.app</span></li>
+<li><a href="https://teletype.in/@boardgamestheory/wnDxmwKMlTy">Марковские процессы принятия решений в коротких нардах и криптографический протокол честных костей</a> <span class="host">teletype.in</span></li>
+</ul>
+<h3>Spanish</h3><ul>
+<li><a href="https://culturayjuegosdetablero.wordpress.com/2026/10/05/el-libro-de-los-juegos-de-alfonso-x-el-sabio-1283-la-gran-enciclopedia-medieval-del-ajedrez-las-tablas-y-los-dados/">El &#x27;Libro de los Juegos&#x27; de Alfonso X el Sabio (1283): La Gran Enciclopedia Medieval del Ajedrez, las Tablas y los Dados</a> <span class="host">culturayjuegosdetablero.wordpress.com</span></li>
+<li><a href="https://culturayjuegosdetablero.wordpress.com/2026/10/05/resena-integral-del-backgammon-competitivo-ciencia-de-probabilidades-psicologia-del-cubo-y-arquitectura-de-motores-neuronales/">Reseña Integral del Backgammon Competitivo: Ciencia de Probabilidades, Psicología del Cubo y Arquitectura de Motores Neuronales</a> <span class="host">culturayjuegosdetablero.wordpress.com</span></li>
+<li><a href="https://game-theory-analysis.web.app/backgammon-procesos-markov-dados/">Procesos de Decisión de Markov y Protocolos de Dados Criptográficamente Verificables en el Backgammon</a> <span class="host">game-theory-analysis.web.app</span></li>
+<li><a href="https://teoria-juegos-tablero.blogspot.com/2026/10/la-dinamica-estocastica-del-backgammon.html">Árboles de Decisión Estocásticos y Redes Neuronales de Valor en Motores Modernos de Backgammon</a> <span class="host">teoria-juegos-tablero.blogspot.com</span></li>
+</ul>
+<h3>Swedish</h3><ul>
+<li><a href="https://bradspel-historia-analys.blogspot.com/2026/10/sannolikhetslara-kognitiv.html">Sannolikhetslära, Kognitiv Beslutsfattning och Fördubblingstärningens Dynamik i Modernt Backgammon</a> <span class="host">bradspel-historia-analys.blogspot.com</span></li>
+<li><a href="https://nouw.com/bradspelsteori/sannolikhetsteori-i-backgammon-markovkedjor-och-dubbleringskubens-matematik-38746110">Sannolikhetsteori i backgammon: Markovkedjor och dubbleringskubens matematik</a> <span class="host">nouw.com</span></li>
+</ul>
+<h3>Turkish</h3><ul>
+<li><a href="https://eksisozluk.com/entry/186941286">Tavla Oyununda Stokastik Markov Karar Süreçleri ve Kriptografik Zar Güvenliği: Expectiminimax ve HMAC-SHA256</a> <span class="host">eksisozluk.com</span></li>
+<li><a href="https://oyun-teorisi-analitik.blogspot.com/2026/10/blog-post.html">Ur Kraliyet Oyunundan Roma Tabulasına ve Klasik Tavlaya: Beş Bin Yıllık Arkeolojik ve Kombinatoryal Evrim</a> <span class="host">oyun-teorisi-analitik.blogspot.com</span></li>
+<li><a href="https://oyun-teorisi-analitik.blogspot.com/2026/10/markov-karar-surecleri-expectiminimax.html">Markov Karar Süreçleri, Expectiminimax Arama Ağaçları ve Modern Tavlada Katlama Zarının Finansal Opsiyon Değerlemesi</a> <span class="host">oyun-teorisi-analitik.blogspot.com</span></li>
+</ul>
+</section>
+<section id="general"><h2>Game theory, history and engine engineering <span class="count">45</span></h2>
+<p class="blurb">State-space complexity, the history of race and capture games, and the networking side of real-time board games.</p>
+<h3>English</h3><ul>
+<li><a href="https://board-games-theory.gitbook.io/board-games-theory-docs/mathematical-foundations-of-abstract-strategy-and-computational-game-engines">Mathematical Foundations of Abstract Strategy and Computational Game Engines</a> <span class="host">board-games-theory.gitbook.io</span></li>
+<li><a href="https://board-games-theory.gitbook.io/checkers-and-draughts-theory/combinatorial-state-spaces-and-topological-graph-representations-of-abstract-board-games">Combinatorial State Spaces and Topological Graph Representations of Abstract Board Games</a> <span class="host">board-games-theory.gitbook.io</span></li>
+<li><a href="https://boardgamestheory.bearblog.dev/stochastic-decision-trees-and-chance-nodes-in-tabletop-systems/">The Mathematics of Imperfect Information and Chance Nodes in Stochastic Tabletop Systems</a> <span class="host">boardgamestheory.bearblog.dev</span></li>
+<li><a href="https://boardgamestheory.codeberg.page/combinatorial-state-spaces.html">Combinatorial State Spaces and Topological Graph Representations of Abstract Board Games</a> <span class="host">boardgamestheory.codeberg.page</span></li>
+<li><a href="https://boardgamestheory.wordpress.com/2026/10/03/the-pip-count-paradox-why-pure-racing-distance-fails-in-contact-positions/">The Pip Count Paradox: Why Pure Racing Distance Fails in Contact Positions</a> <span class="host">boardgamestheory.wordpress.com</span></li>
+<li><a href="https://dev.to/payamprivate/building-low-latency-turn-based-game-clients-canvas-rendering-coordinate-systems-and-state-3lk5">Building Low-Latency Turn-Based Game Clients: Canvas Rendering, Coordinate Systems, and State Reconciliation</a> <span class="host">dev.to</span></li>
+<li><a href="https://dev.to/payamprivate/architecture-of-modern-web-game-engines-canvas-rendering-csprng-fairness-and-webrtc-voice-in-1ge8">Architecture of Modern Web Game Engines: Canvas Rendering, CSPRNG Fairness, and WebRTC Voice in Distributed Turn-Based Systems</a> <span class="host">dev.to</span></li>
+<li><a href="https://dust-polyester-5af.notion.site/Stochastic-State-Trees-and-Probability-Modeling-in-Classical-Board-Games-3ee66b526e5f801589b5ca1c99ebd44c">Stochastic State Trees and Probability Modeling in Classical Board Games</a> <span class="host">dust-polyester-5af.notion.site</span></li>
+<li><a href="https://gamestechai.blogspot.com/2026/10/neural-network-architectures-for-two.html">Neural Network Architectures for Two-Player Zero-Sum Games: From Convolutional Grids to Residual Transformers</a> <span class="host">gamestechai.blogspot.com</span></li>
+<li><a href="https://gist.github.com/poyeshsoftware/777e95ded9f03dc42fe319288c7ed09e">Zobrist Hashing and Transposition Table Optimization in Two-Player Zero-Sum Game Engines</a> <span class="host">gist.github.com</span></li>
+<li><a href="https://gist.github.com/poyeshsoftware/243d5bcf28da2e1f5149aee252517c53">Cryptographic Randomness, Deterministic Shuffling, and Verifiable State Invariants in Digital Tabletop Systems</a> <span class="host">gist.github.com</span></li>
+<li><a href="https://gitlab.com/poyeshsoftware/game-theory-analysis/-/blob/main/combinatorial-state-spaces.md">Combinatorial State Spaces and Topological Graph Representations of Abstract Board Games</a> <span class="host">gitlab.com</span></li>
+<li><a href="https://medium.com/@payamprivate/transposition-bounds-zobrist-signatures-and-state-space-search-in-combinatorial-games-63071195457c">Transposition Bounds, Zobrist Signatures, and State Space Search in Combinatorial Games</a> <span class="host">medium.com</span></li>
+<li><a href="https://nrwd9l.webmepage.com/board-games-theory-analysis">5,000 Years of Abstract Strategy: From Predynastic Senet and Ur to Classical Tabula</a> <span class="host">nrwd9l.webmepage.com</span></li>
+<li><a href="https://paper.wf/boardgamestheory/from-the-royal-game-of-ur-to-roman-tabula-the-5-000-year-archaeological">From the Royal Game of Ur to Roman Tabula: The 5,000-Year Archaeological Evolution of Tabletop Gaming</a> <span class="host">paper.wf</span></li>
+<li><a href="https://payamghaderkourehpaz530787.substack.com/p/the-shannon-number-of-the-physical">The Shannon Number of the Physical World: Why Board Geometry Defies Brute Force Computation</a> <span class="host">payamghaderkourehpaz530787.substack.com</span></li>
+<li><a href="https://payamghaderkourehpaz530787.substack.com/p/stochastic-tree-search-and-td-gammon">Stochastic Tree Search and TD-Gammon Neural Architectures</a> <span class="host">payamghaderkourehpaz530787.substack.com</span></li>
+<li><a href="https://payamghaderkourehpaz530787.substack.com/p/combinatorial-state-spaces-and-topological">Combinatorial State Spaces and Topological Graph Representations of Abstract Board Games</a> <span class="host">payamghaderkourehpaz530787.substack.com</span></li>
+<li><a href="https://peyman.voog.com/blog/archaeological-evolution-tabletop-strategy">The 5,000-Year Archaeological Evolution of Tabletop Strategy: From the Royal Game of Ur to Roman Tabula</a> <span class="host">peyman.voog.com</span></li>
+<li><a href="https://poyeshsoftware.github.io/game-theory-analysis/">Computational Complexity &amp; Algorithmic State Evaluation in Classical Board Games</a> <span class="host">poyeshsoftware.github.io</span></li>
+<li><a href="https://sites.google.com/view/game-theory-analysis">The Geometry of Abstract Strategy &amp; Computational Complexity</a> <span class="host">sites.google.com</span></li>
+<li><a href="https://tabletopanalysis.wordpress.com/2026/10/05/zobrist-hashing-and-transposition-table-bounds-in-combinatorial-game-solvers/">Zobrist Hashing and Transposition Table Bounds in Combinatorial Game Solvers</a> <span class="host">tabletopanalysis.wordpress.com</span></li>
+<li><a href="https://tabletopanalysis.wordpress.com/2026/10/05/stochastic-game-tree-pruning-star1-and-star2-algorithms-in-chance-based-decision-systems/">Stochastic Game Tree Pruning: Star1 and Star2 Algorithms in Chance-Based Decision Systems</a> <span class="host">tabletopanalysis.wordpress.com</span></li>
+<li><a href="https://tireless-canary-1193vvfboardgametheory.mystrikingly.com/blog/evaluating-classical-board-states-from-handcrafted-heuristics-to-neural">Evaluating Classical Board States: From Handcrafted Heuristics to Neural Network Value Functions</a> <span class="host">tireless-canary-1193vvfboardgametheory.mystrikingly.com</span></li>
+<li><a href="https://tireless-canary-1193vvfboardgametheory.mystrikingly.com/blog/option-pricing-and-optimal-stopping-boundaries-in-stochastic-board-games">Option Pricing and Optimal Stopping Boundaries in Stochastic Board Games</a> <span class="host">tireless-canary-1193vvfboardgametheory.mystrikingly.com</span></li>
+<li><a href="https://tireless-canary-1193vvfboardgametheory.mystrikingly.com/blog/archaeological-foundations-and-combinatorial-board-design-from-the-royal">Archaeological Foundations and Combinatorial Board Design: From the Royal Game of Ur to Roman Ludus Duodecim Scriptorum</a> <span class="host">tireless-canary-1193vvfboardgametheory.mystrikingly.com</span></li>
+<li><a href="https://wakelet.com/wake/YDrBbBigNcJoZbIqUO6q3">Computational Combinatorics and Game Theory in Classical Board Games</a> <span class="host">wakelet.com</span></li>
+<li><a href="https://workoutingym.hashnode.dev/state-synchronization-and-optimistic-prediction-in-turn-based-peer-to-peer-games">State Synchronization and Optimistic Prediction in Turn-Based Peer-to-Peer Games</a> <span class="host">workoutingym.hashnode.dev</span></li>
+<li><a href="https://workoutingym.hashnode.dev/cryptographic-commit-reveal-protocols-verifiable-randomness-and-prng-seed-generation-in-distributed-tabletop-networks">Cryptographic Commit-Reveal Protocols, Verifiable Randomness, and PRNG Seed Generation in Distributed Tabletop Networks</a> <span class="host">workoutingym.hashnode.dev</span></li>
+<li><a href="https://write.as/y6i659mj7budz.md">The Ergodicity Problem in Board Games: Why Expected Value Fails Over Short Horizons</a> <span class="host">write.as</span></li>
+<li><a href="https://write.as/y2iyaydsw0nt2.md">Backward Induction in Combinatorial Games: From Zermelo&#x27;s Theorem to Modern Solvers</a> <span class="host">write.as</span></li>
+<li><a href="https://www.linkedin.com/pulse/architecting-low-latency-turn-based-game-engines-why-ghaderkourehpaz-evarf/">Architecting Low-Latency Turn-Based Game Engines: Why 2D Custom Canvas Bypasses the DOM Overhead</a> <span class="host">www.linkedin.com</span></li>
+</ul>
+<h3>Danish / Norwegian</h3><ul>
+<li><a href="https://braetspil-historie-analyse.blogspot.com/2026/10/fra-ur-spillet-og-romersk-tabula-til.html">Fra Ur-spillet og romersk Tabula til Hnefatafl: De klassiske brætspils arkæologi og kulturhistorie i Norden og Europa</a> <span class="host">braetspil-historie-analyse.blogspot.com</span></li>
+</ul>
+<h3>Finnish</h3><ul>
+<li><a href="https://lautapelit-historia-analyysi.blogspot.com/2026/10/ur-pelista-hnefatafliin-ja-tammeen_0777621720.html">Urin kuninkaallisesta pelistä Hnefatafliin ja Tammeen: Klassisten lautapelien arkeologia ja kulttuurihistoria Pohjolassa ja maailmalla</a> <span class="host">lautapelit-historia-analyysi.blogspot.com</span></li>
+</ul>
+<h3>French</h3><ul>
+<li><a href="https://theoriejeuxplateau.wordpress.com/2026/10/05/complexite-computationnelle-et-espaces-detats-des-jeux-de-strategie-combinatoire/">Complexité Computationnelle et Espaces d&#x27;États des Jeux de Stratégie Combinatoire</a> <span class="host">theoriejeuxplateau.wordpress.com</span></li>
+</ul>
+<h3>German</h3><ul>
+<li><a href="https://brettspielkulturundtheorie.wordpress.com/2026/10/06/vom-koniglichen-spiel-von-ur-zum-wurfzabel-die-kulturhistorische-genese-der-rundlaufspiele/">Vom Königlichen Spiel von Ur zum Wurfzabel: Die kulturhistorische Genese der Rundlaufspiele</a> <span class="host">brettspielkulturundtheorie.wordpress.com</span></li>
+<li><a href="https://spieltheorie-analytik.jimdofree.com/2026/10/05/kombinatorische-spieltheorie-und-entscheidungsb%C3%A4ume-in-abstrakten-brettspielen/">Kombinatorische Spieltheorie und Entscheidungsbäume in Abstrakten Brettspielen</a> <span class="host">spieltheorie-analytik.jimdofree.com</span></li>
+</ul>
+<h3>Japanese</h3><ul>
+<li><a href="https://ameblo.jp/boardgamestheory/entry-12980805006.html">ゲーム木探索とダブリングキューブの金融工学的評価：現代AIの数理</a> <span class="host">ameblo.jp</span></li>
+</ul>
+<h3>Korean</h3><ul>
+<li><a href="https://velog.io/@boardgamestheory/우르의-왕실-게임부터-삼국시대-쌍륙雙六까지-5000년-추상전략-보드게임의-역사와-고고학">우르의 왕실 게임부터 삼국시대 쌍륙(雙六)까지: 5,000년 추상전략 보드게임의 역사와 고고학</a> <span class="host">velog.io</span></li>
+</ul>
+<h3>Persian</h3><ul>
+<li><a href="https://khavas.jimdofree.com/2026/10/03/تأثیر-بازی-های-استراتژیک-و-تفکر-تحلیلی-بر-بهداشت-روان-تقویت-حافظه-و-کاهش-استرس/">تأثیر بازی های استراتژیک و تفکر تحلیلی بر بهداشت روان، تقویت حافظه و کاهش استرس</a> <span class="host">khavas.jimdofree.com</span></li>
+<li><a href="https://virgool.io/p/dunojncwiwyn">معماری کلاینت‌های بازی‌های نوبتی با تأخیر صفر: چرا رندر مستقیم Canvas از درخت DOM سریع‌تر است؟</a> <span class="host">virgool.io</span></li>
+</ul>
+<h3>Portuguese</h3><ul>
+<li><a href="https://teoria-jogos-tabuleiro.blogspot.com/2026/10/blog-post.html">Da Necrópole de Ur à Tabula Romana e ao Gamão: Cinco Milênios de Arqueologia e Evolução Combinatória das Tábuas</a> <span class="host">teoria-jogos-tabuleiro.blogspot.com</span></li>
+</ul>
+<h3>Spanish</h3><ul>
+<li><a href="https://my-website-enuv7b.webnode.page/l/teoria-combinatoria-de-juegos-y-espacios-de-estados-en-juegos-de-tablero-clasicos/">Teoría Combinatoria de Juegos y Espacios de Estados en Juegos de Tablero Clásicos</a> <span class="host">my-website-enuv7b.webnode.page</span></li>
+</ul>
+<h3>Swedish</h3><ul>
+<li><a href="https://bradspel-historia-analys.blogspot.com/2026/10/fran-hnefatafl-till-det-kungliga-spelet.html">Från Hnefatafl till Det Kungliga Spelet i Ur: Forntida Brädspel, Arkeologiska Fynd och Kulturell Betydelse i Skandinavien</a> <span class="host">bradspel-historia-analys.blogspot.com</span></li>
+<li><a href="https://nouw.com/bradspelsteori/fran-det-kungliga-spelet-i-ur-till-vikingatidens-hnefatafl-bradspelens-arkeologiska-evolution-38746108">Från det kungliga spelet i Ur till vikingatidens Hnefatafl: Brädspelens arkeologiska evolution</a> <span class="host">nouw.com</span></li>
+</ul>
+</section>
+
+<section id="play">
+<h2>Try the ideas yourself</h2>
+<p>Reading about search trees is one thing; watching an engine find a move is another. All three games are free to play in the browser on <a href="https://boardgammon.com/">Boardgammon</a>. On each one you can play against engines of increasing strength and review your games afterwards:</p>
+<ul>
+<li><a href="https://boardgammon.com/chess/">Boardgammon Chess</a>: play and analyse chess against engine opponents.</li>
+<li><a href="https://boardgammon.com/checkers/play/">Checkers Crown</a>: English checkers in the browser, with bots from beginner to expert.</li>
+<li><a href="https://boardgammon.com/">Boardgammon backgammon</a>: online play with the doubling cube, post-game analysis and verifiable dice.</li>
+</ul>
+</section>
+
+<footer>
+<p>This index is maintained alongside the <a href="https://github.com/poyeshsoftware/game-theory-analysis">game-theory-analysis</a> repository. Related essays on this site: <a href="index.html">Evaluating Classical Board States</a>, <a href="neural-evaluation-backgammon.html">Neural Evaluation in Backgammon</a>, <a href="doubling-cube-ergodicity-volatility.html">Doubling Cube Ergodicity and Volatility</a>.</p>
+</footer>
+</div>
+</body>
+</html>
